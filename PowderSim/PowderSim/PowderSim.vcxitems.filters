@@ -15,31 +15,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Main.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Window\Window.h">
-      <Filter>src\Core\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Window\WindowManager.h">
-      <Filter>src\Core\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Dispatching\CoreLoops.h">
-      <Filter>src\Core\Dispatching</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProtoFunctions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Main.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Window\Window.cpp">
-      <Filter>src\Core\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Window\WindowManager.cpp">
-      <Filter>src\Core\Window</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Main.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.cpp" />
   </ItemGroup>
 </Project>
