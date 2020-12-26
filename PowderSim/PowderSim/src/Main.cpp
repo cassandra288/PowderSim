@@ -8,23 +8,27 @@
 
 #include "src/Core/Window/WindowManager.h"
 #include "src/Core/Ecs/SystemProto.h"
-#include "src/Core/Ecs/SystemProtoFunctions.h"
+#include "src/Core/Dispatching/CoreLoops.h"
+
+USING_LOGGER
 
 
 namespace powd
 {
-	bool running = true;
-
-	void OnMainClose()
-	{
-		running = false;
-	}
-
 	class TestSystem : ecs::SystemProto
 	{
 		DEFINE_SYSTEM_PROTO(TestSystem);
 
 	public:
+		System_Tick(dt)
+		{
+			Logger::Lock() << "Tick: " << dt << Logger::endl;
+		}
+
+		System_Render(dt)
+		{
+			Logger::Lock() << "Render: " << dt << Logger::endl;
+		}
 	};
 	
 
@@ -34,14 +38,9 @@ namespace powd
 
 		window::StartSDL();
 		
-		window::mainWindow = window::StartWindow("Powder Sim", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN, OnMainClose);
+		window::mainWindow = window::StartWindow("Powder Sim", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN, dispatch::StopCoreLoop);
 
-		while (running)
-		{
-			cpplog::Logger::Lock() << window::FlushEvents() << cpplog::Logger::endl;
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(500));
-		}
+		dispatch::CoreLoop();
 
 		return 0;
 	}

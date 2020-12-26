@@ -17,11 +17,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProtoFunctions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Math\CommonMath.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Main.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Main.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.cpp" />

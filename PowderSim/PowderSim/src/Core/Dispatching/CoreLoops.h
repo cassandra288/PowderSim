@@ -1,7 +1,9 @@
 #pragma once
 
 
-namespace pwod::dispatch
+namespace powd::dispatch
 {
-	
+	void CoreLoop();
+
+	void StopCoreLoop();
 }
