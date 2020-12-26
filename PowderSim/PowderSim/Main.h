@@ -1,3 +1,6 @@
 #pragma once
 
-int Main();
+namespace powd
+{
+	int Main();
+}

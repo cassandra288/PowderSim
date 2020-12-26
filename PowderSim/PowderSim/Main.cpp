@@ -1,11 +1,36 @@
-#include <iostream>
-
 #include "Main.h"
 
+#include <thread>
 
-int Main()
+#include <GL/glew.h>
+#include <SDL2/SDL_opengl.h>
+#include <CppLog/Logger.h>
+
+#include "WindowManager.h"
+
+
+namespace powd
 {
-	std::cout << "Hello from Powder Sim!" << std::endl;
+	bool running = true;
 
-	return 0;
+	void OnMainClose()
+	{
+		running = false;
+	}
+
+	int Main()
+	{
+		new cpplog::Logger("log.txt", "Main", 4);
+
+		window::StartSDL();
+		
+		window::mainWindow = window::StartWindow("Powder Sim", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN, OnMainClose);
+
+		while (running)
+		{
+			cpplog::Logger::Lock() << window::FlushEvents() << cpplog::Logger::endl;
+		}
+
+		return 0;
+	}
 }

@@ -4,15 +4,30 @@
     <Filter Include="src">
       <UniqueIdentifier>{7791f6b7-a123-46d1-982d-a90e17520f33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Window">
+      <UniqueIdentifier>{0b8d24f9-61f4-45dd-9a16-386c5499f58f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Main.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)WindowManager.h">
+      <Filter>src\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Window.h">
+      <Filter>src\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Main.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)WindowManager.cpp">
+      <Filter>src\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Window.cpp">
+      <Filter>src\Window</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

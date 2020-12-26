@@ -342,5 +342,6 @@ healthchecksdb
 
 
 NetBullet/#out/
+**/log.txt
 
 !**/.gitkeep

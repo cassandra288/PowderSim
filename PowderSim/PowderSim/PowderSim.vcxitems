@@ -15,8 +15,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Main.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Window.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Main.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Window.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WindowManager.cpp" />
   </ItemGroup>
 </Project>
