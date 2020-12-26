@@ -1,6 +1,8 @@
 #include "WindowManager.h"
 
 #include <unordered_map>
+#include <mutex>
+
 #include <CppLog/Logger.h>
 USING_LOGGER
 
@@ -14,10 +16,14 @@ namespace powd::window
 		std::unordered_map<uint32_t, Window*> instanceMap;
 
 		bool sdlStarted = false;
+
+		std::mutex mut;
 	}
 
 	Window* GetInstance(uint32_t _id)
 	{
+		std::lock_guard<std::mutex>lck(mut);
+
 		if (instanceMap.find(_id) == instanceMap.end()) /// check to see if the ID is in the map
 			return nullptr;
 		return instanceMap[_id];
@@ -33,6 +39,8 @@ namespace powd::window
 		void(*_windowClosedCallback)()
 	)
 	{
+ 		std::lock_guard<std::mutex>lck(mut);
+
 		if (!sdlStarted)
 		{
 			Logger::Log("Creating window without starting SDL.", Logger::WARNING);
@@ -46,6 +54,8 @@ namespace powd::window
 
 	void StopWindow(uint32_t _id)
 	{
+		std::lock_guard<std::mutex>lck(mut);
+
 		if (instanceMap.find(_id) == instanceMap.end())
 			return Logger::Log("Attempted to stop an invalid window.", Logger::WARNING);
 		delete instanceMap[_id];
@@ -70,6 +80,8 @@ namespace powd::window
 	
 	int FlushEvents()
 	{
+		std::lock_guard<std::mutex>lck(mut);
+
 		SDL_PumpEvents();
 
 		SDL_Event e;
@@ -83,25 +95,25 @@ namespace powd::window
 			{
 				if (instanceMap.find(e.window.windowID) == instanceMap.end())
 					continue;
-				Window* relevantWindow = GetInstance(e.window.windowID);
+				Window* relevantWindow = instanceMap[e.window.windowID];
 				switch (e.window.event)
 				{
 				case SDL_WINDOWEVENT_RESIZED:
-					relevantWindow->width = e.window.data1;
-					relevantWindow->height = e.window.data2;
+					relevantWindow->SetWidthAndHeightInternal(e.window.data1, e.window.data2);
 					break;
 
 				case SDL_WINDOWEVENT_MINIMIZED:
-					relevantWindow->minimized = true;
+					relevantWindow->SetMinimized(true);
 					break;
 
 				case SDL_WINDOWEVENT_RESTORED:
-					relevantWindow->minimized = false;
+					relevantWindow->SetMinimized(false);
 					break;
 
 				case SDL_WINDOWEVENT_CLOSE:
 					relevantWindow->closedCallback();
-					StopWindow(e.window.windowID);
+					delete instanceMap[e.window.windowID];
+					instanceMap.erase(e.window.windowID);
 					break;
 				}
 			}

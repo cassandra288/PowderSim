@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <mutex>
 
 #include <SDL2/SDL.h>
 
@@ -20,6 +21,8 @@ namespace powd::window
 		bool minimized = false;
 		Callback_Close closedCallback;
 
+		std::mutex mut;
+
 
 		Window(
 			std::string _windowTitle = "",
@@ -32,21 +35,24 @@ namespace powd::window
 		);
 		~Window();
 
+		void SetMinimized(bool _val) { std::lock_guard<std::mutex>lck(mut); minimized = _val; }
+		void SetWidthAndHeightInternal(uint32_t _width, uint32_t _height) { std::lock_guard<std::mutex>lck(mut); width = _width, height = _height; }
+
 	public:
-		SDL_Window* getWindow() { return sdlWindow; }
-		std::string getTitle() { return title; }
-		unsigned int getWidth() { return width; }
-		unsigned int getHeight() { return height; }
+		SDL_Window* getWindow() { std::lock_guard<std::mutex>lck(mut); return sdlWindow; }
+		std::string getTitle() { std::lock_guard<std::mutex>lck(mut); return title; }
+		unsigned int getWidth() { std::lock_guard<std::mutex>lck(mut); return width; }
+		unsigned int getHeight() { std::lock_guard<std::mutex>lck(mut); return height; }
 
 		operator SDL_Window* () const { return sdlWindow; }
 
-		void setTitle(std::string _title) { title = _title; SDL_SetWindowTitle(sdlWindow, title.data()); }
-		void setWidth(unsigned int _width) { width = _width; SDL_SetWindowSize(sdlWindow, width, height); }
-		void setHeight(unsigned int _height) { height = _height; SDL_SetWindowSize(sdlWindow, width, height); }
-		void setWidthAndHeight(unsigned int _width, unsigned int _height) { width = _width; height = _height; SDL_SetWindowSize(sdlWindow, width, height); }
+		void setTitle(std::string _title) { std::lock_guard<std::mutex>lck(mut); title = _title; SDL_SetWindowTitle(sdlWindow, title.data()); }
+		void setWidth(unsigned int _width) { std::lock_guard<std::mutex>lck(mut); width = _width; SDL_SetWindowSize(sdlWindow, width, height); }
+		void setHeight(unsigned int _height) { std::lock_guard<std::mutex>lck(mut); height = _height; SDL_SetWindowSize(sdlWindow, width, height); }
+		void setWidthAndHeight(unsigned int _width, unsigned int _height) { std::lock_guard<std::mutex>lck(mut); width = _width; height = _height; SDL_SetWindowSize(sdlWindow, width, height); }
 
-		uint32_t GetID() { return SDL_GetWindowID(sdlWindow); }
-		bool IsMinimized() { return minimized; }
+		uint32_t GetID() { std::lock_guard<std::mutex>lck(mut); return SDL_GetWindowID(sdlWindow); }
+		bool IsMinimized() { std::lock_guard<std::mutex>lck(mut);  minimized; }
 
 
 		friend uint32_t StartWindow(
