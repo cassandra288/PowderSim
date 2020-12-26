@@ -3,5 +3,5 @@
 
 int main()
 {
-	return Main();
+	return powd::Main();
 }
