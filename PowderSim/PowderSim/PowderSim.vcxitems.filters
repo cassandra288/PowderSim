@@ -27,6 +27,8 @@
     <ClInclude Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Dispatching\CoreLoops.h">
       <Filter>src\Core\Dispatching</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProtoFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Main.cpp">
@@ -38,5 +40,6 @@
     <ClCompile Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Window\WindowManager.cpp">
       <Filter>src\Core\Window</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />
   </ItemGroup>
 </Project>

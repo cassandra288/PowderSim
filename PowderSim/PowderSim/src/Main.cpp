@@ -7,6 +7,8 @@
 #include <CppLog/Logger.h>
 
 #include "src/Core/Window/WindowManager.h"
+#include "src/Core/Ecs/SystemProto.h"
+#include "src/Core/Ecs/SystemProtoFunctions.h"
 
 
 namespace powd
@@ -18,6 +20,14 @@ namespace powd
 		running = false;
 	}
 
+	class TestSystem : ecs::SystemProto
+	{
+		DEFINE_SYSTEM_PROTO(TestSystem);
+
+	public:
+	};
+	
+
 	int Main()
 	{
 		new cpplog::Logger("log.txt", "Main", 4);
@@ -26,15 +36,16 @@ namespace powd
 		
 		window::mainWindow = window::StartWindow("Powder Sim", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN, OnMainClose);
 
-		window::StartWindow("Another Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 853, 480, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN, []() {cpplog::Logger::Log("Test"); });
-
 		while (running)
 		{
 			cpplog::Logger::Lock() << window::FlushEvents() << cpplog::Logger::endl;
 
-			std::this_thread::sleep_for(std::chrono::microseconds(3));
+			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		}
 
 		return 0;
 	}
+
+
+	IMPLEMENT_SYSTEM_PROTO(TestSystem);
 }
