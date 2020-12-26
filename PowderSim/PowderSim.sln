@@ -13,7 +13,6 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PowderSim\PowderSim.vcxitems*{5d184772-0db0-40ca-8f76-048fb73029d2}*SharedItemsImports = 9
 		PowderSim\PowderSim.vcxitems*{a5442434-5af6-45dc-9c46-b438cc5b924f}*SharedItemsImports = 4
-		PowderSim\PowderSim.vcxitems*{a54c9f21-c064-4979-8221-72cb262b185a}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
