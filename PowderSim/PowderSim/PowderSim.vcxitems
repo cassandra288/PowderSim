@@ -14,13 +14,14 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Main.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Window.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)WindowManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Main.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Main.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Window.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)WindowManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Main.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.cpp" />
   </ItemGroup>
 </Project>

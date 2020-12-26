@@ -101,6 +101,7 @@ namespace powd::window
 
 				case SDL_WINDOWEVENT_CLOSE:
 					relevantWindow->closedCallback();
+					StopWindow(e.window.windowID);
 					break;
 				}
 			}

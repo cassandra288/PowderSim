@@ -4,30 +4,39 @@
     <Filter Include="src">
       <UniqueIdentifier>{7791f6b7-a123-46d1-982d-a90e17520f33}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Window">
+    <Filter Include="src\Core">
+      <UniqueIdentifier>{998752ce-1516-4b59-bb3d-8930e1711128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Core\Window">
       <UniqueIdentifier>{0b8d24f9-61f4-45dd-9a16-386c5499f58f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Core\Dispatching">
+      <UniqueIdentifier>{d9876c99-e1b9-4463-b910-4e7680c9d8e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Main.h">
+    <ClInclude Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Main.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)WindowManager.h">
-      <Filter>src\Window</Filter>
+    <ClInclude Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Window\Window.h">
+      <Filter>src\Core\Window</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Window.h">
-      <Filter>src\Window</Filter>
+    <ClInclude Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Window\WindowManager.h">
+      <Filter>src\Core\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Dispatching\CoreLoops.h">
+      <Filter>src\Core\Dispatching</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Main.cpp">
+    <ClCompile Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)WindowManager.cpp">
-      <Filter>src\Window</Filter>
+    <ClCompile Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Window\Window.cpp">
+      <Filter>src\Core\Window</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Window.cpp">
-      <Filter>src\Window</Filter>
+    <ClCompile Include="C:\Users\thoma\Desktop\Projects\##main\PowderSim\PowderSim\PowderSim\src\Core\Window\WindowManager.cpp">
+      <Filter>src\Core\Window</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
