@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PowderSim", "PowderSim\PowderSim.vcxitems", "{5D184772-0DB0-40CA-8F76-048FB73029D2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsConsole", "WindowsConsole\WindowsConsole.vcxproj", "{A5442434-5AF6-45DC-9C46-B438CC5B924F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LinuxConsole", "LinuxConsole\LinuxConsole.vcxproj", "{A54C9F21-C064-4979-8221-72CB262B185A}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		PowderSim\PowderSim.vcxitems*{5d184772-0db0-40ca-8f76-048fb73029d2}*SharedItemsImports = 9
+		PowderSim\PowderSim.vcxitems*{a5442434-5af6-45dc-9c46-b438cc5b924f}*SharedItemsImports = 4
+		PowderSim\PowderSim.vcxitems*{a54c9f21-c064-4979-8221-72cb262b185a}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5442434-5AF6-45DC-9C46-B438CC5B924F}.Debug|x64.ActiveCfg = Debug|x64
+		{A5442434-5AF6-45DC-9C46-B438CC5B924F}.Debug|x64.Build.0 = Debug|x64
+		{A5442434-5AF6-45DC-9C46-B438CC5B924F}.Debug|x86.ActiveCfg = Debug|Win32
+		{A5442434-5AF6-45DC-9C46-B438CC5B924F}.Debug|x86.Build.0 = Debug|Win32
+		{A5442434-5AF6-45DC-9C46-B438CC5B924F}.Release|x64.ActiveCfg = Release|x64
+		{A5442434-5AF6-45DC-9C46-B438CC5B924F}.Release|x64.Build.0 = Release|x64
+		{A5442434-5AF6-45DC-9C46-B438CC5B924F}.Release|x86.ActiveCfg = Release|Win32
+		{A5442434-5AF6-45DC-9C46-B438CC5B924F}.Release|x86.Build.0 = Release|Win32
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Debug|x64.ActiveCfg = Debug|x64
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Debug|x64.Build.0 = Debug|x64
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Debug|x64.Deploy.0 = Debug|x64
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Debug|x86.ActiveCfg = Debug|x86
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Debug|x86.Build.0 = Debug|x86
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Debug|x86.Deploy.0 = Debug|x86
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Release|x64.ActiveCfg = Release|x64
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Release|x64.Build.0 = Release|x64
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Release|x64.Deploy.0 = Release|x64
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Release|x86.ActiveCfg = Release|x86
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Release|x86.Build.0 = Release|x86
+		{A54C9F21-C064-4979-8221-72CB262B185A}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE1B64BB-A465-4D02-A13F-D0E73CCE83D2}
+	EndGlobalSection
+EndGlobal
