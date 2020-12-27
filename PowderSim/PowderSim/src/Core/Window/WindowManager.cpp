@@ -67,11 +67,24 @@ namespace powd::window
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | _flags) != 0)
 			Logger::Log("SDL Error: " + std::string(SDL_GetError()), Logger::EXCEPTION);
 
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+
 		sdlStarted = true;
 	}
 
 	void StopSDL()
 	{
+		std::vector<uint32_t> IDs = {};
+		for (std::pair<uint32_t, Window*> windowPair : instanceMap)
+		{
+			IDs.push_back(windowPair.first);
+		}
+		for (uint32_t ID : IDs)
+		{
+			StopWindow(ID);
+		}
+
 		SDL_Quit();
 
 		sdlStarted = false;

@@ -80,6 +80,8 @@ namespace powd::dispatch
 
 				window::FlushEvents();
 
+				if (!running)
+					break;
 
 				while (currentTime >= timepoints.tick - roughness)
 				{

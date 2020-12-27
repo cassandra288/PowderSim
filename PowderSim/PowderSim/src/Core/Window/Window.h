@@ -20,6 +20,7 @@ namespace powd::window
 		uint32_t height = 0;
 		bool minimized = false;
 		Callback_Close closedCallback;
+		SDL_GLContext glContext;
 
 		std::mutex mut;
 
@@ -40,11 +41,13 @@ namespace powd::window
 
 	public:
 		SDL_Window* getWindow() { std::lock_guard<std::mutex>lck(mut); return sdlWindow; }
+		SDL_GLContext getContext() { std::lock_guard<std::mutex>lck(mut); return glContext; }
 		std::string getTitle() { std::lock_guard<std::mutex>lck(mut); return title; }
 		unsigned int getWidth() { std::lock_guard<std::mutex>lck(mut); return width; }
 		unsigned int getHeight() { std::lock_guard<std::mutex>lck(mut); return height; }
 
-		operator SDL_Window* () const { return sdlWindow; }
+		operator SDL_Window* () { std::lock_guard<std::mutex>lck(mut); return sdlWindow; }
+		operator SDL_GLContext () { std::lock_guard<std::mutex>lck(mut); return glContext; }
 
 		void setTitle(std::string _title) { std::lock_guard<std::mutex>lck(mut); title = _title; SDL_SetWindowTitle(sdlWindow, title.data()); }
 		void setWidth(unsigned int _width) { std::lock_guard<std::mutex>lck(mut); width = _width; SDL_SetWindowSize(sdlWindow, width, height); }

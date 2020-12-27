@@ -17,10 +17,15 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProtoFunctions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\BaseException.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\RenderingExceptions.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Math\CommonMath.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\StringUtils.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Main.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\GlMeshData.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.cpp" />
@@ -28,5 +33,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Main.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Renderer.cpp" />
   </ItemGroup>
 </Project>
