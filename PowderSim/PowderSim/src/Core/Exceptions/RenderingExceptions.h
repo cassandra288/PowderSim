@@ -8,14 +8,14 @@
 
 namespace powd::exceptions
 {
-	class GlewException : public BaseException
+	class GlException : public BaseException
 	{
 	protected:
 		std::string message;
 		GLenum errorCode;
-		
+
 	public:
-		GlewException(std::string _message, GLenum _errorCode, const char* _file, unsigned int _line) : BaseException(_file, _line)
+		GlException(std::string _message, GLenum _errorCode, const char* _file, unsigned int _line) : BaseException(_file, _line)
 		{
 			message = _message;
 			errorCode = _errorCode;
@@ -23,7 +23,7 @@ namespace powd::exceptions
 
 		std::string ExceptionType() const override
 		{
-			return "Glew";
+			return "OpenGL";
 		}
 
 		std::string Message() const override

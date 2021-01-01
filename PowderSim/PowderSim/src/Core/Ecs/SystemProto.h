@@ -6,6 +6,7 @@
 #include <entt.hpp>
 
 
+// These two macros are used to define and implement some prototype data to enable the class as a true ECS system.
 #define DEFINE_SYSTEM_PROTO(__type__)	private: static powd::ecs::SystemProto* SystemProto_##__type__; \
 										public: static const std::string systemUID;
 

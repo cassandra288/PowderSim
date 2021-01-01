@@ -26,7 +26,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\RenderingExceptions.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\BaseException.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\StringUtils.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\GlMeshData.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\GenericExceptions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\SysMeshRenderer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\CompRenderMaterial.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlVertexCache.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlUbo.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlShader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\EntityRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />
@@ -35,5 +41,10 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Renderer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\SysMeshRenderer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlVertexCache.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlUbo.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlShader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\EntityRegistry.cpp" />
   </ItemGroup>
 </Project>
