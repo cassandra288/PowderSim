@@ -104,7 +104,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)#in\Win\Lib\x86;$(SolutionDir)#in\Win\Lib\agn;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenGL32.lib;glew32.lib;SDL2.lib;CppLog_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.lib;glew32.lib;SDL2.lib;CppLog_d.lib;soil2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>call $(SolutionDir)##buildsteps\MakeWD.bat $(DebuggerWorkingDirectory)\</Command>
@@ -131,7 +131,7 @@ call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Win\Bin\x86\\
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)#in\Win\Lib\x86;$(SolutionDir)#in\Win\Lib\agn;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenGL32.lib;glew32.lib;SDL2.lib;CppLog.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.lib;glew32.lib;SDL2.lib;CppLog.lib;soil2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>call $(SolutionDir)##buildsteps\MakeWD.bat $(DebuggerWorkingDirectory)\</Command>

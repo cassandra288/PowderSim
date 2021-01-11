@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
 #include <CppLog/Logger.h>
+#include <SOIL2/SOIL2.h>
 
 #include "src/Core/Exceptions/RenderingExceptions.h"
 #include "src/Core/Window/WindowManager.h"
@@ -55,14 +56,11 @@ namespace powd
 		GlShader* shader = new GlShader("shader.vert", "shader.frag");
 		shader->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
 		shader->BuildVAO();
-		GlShader* shader2 = new GlShader("inst_shader.vert", "inst_shader.frag");
-		shader2->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
-		shader2->BuildVAO();
 
 		glm::vec3 red(1, 0, 0);
 		glm::vec3 green(0, 1, 0);
 
-		/*{
+		{
 			auto entity1 = ecs::entities.create();
 			auto& mat1 = ecs::entities.emplace<components::CompRenderMaterial>(entity1);
 
@@ -92,48 +90,6 @@ namespace powd
 			trans.scale = { 2, 2 };
 
 			trans.startX = 5;
-		}*/
-
-		{
-			auto entity = ecs::entities.create();
-			auto& mat = ecs::entities.emplace<components::CompRenderMaterial>(entity);
-
-			mat.mesh = mesh2;
-			mat.shader = shader2;
-			mat.instanceCount = 100;
-
-			const unsigned xSize = 48;
-			constexpr unsigned ySize = ((float)xSize / 16.f) * 9.f;
-			constexpr unsigned area = xSize * ySize;
-			glm::vec2* posArr = new glm::vec2[area];
-			glm::vec3* colArr = new glm::vec3[area];
-			for (unsigned ix = 0; ix < xSize; ix++)
-			{
-				for (unsigned iy = 0; iy < ySize; iy++)
-				{
-					glm::vec2 pos((int)ix - xSize/2, (int)iy - ySize/2);
-					posArr[(ix * xSize) + iy] = pos;
-
-					int tmp = ix;
-					if (iy % 2 == 0)
-						tmp -= 1;
-
-					if (tmp % 2 == 0)
-						colArr[(ix * xSize) + iy] = glm::vec3(green);
-					else
-						colArr[(ix * xSize) + iy] = glm::vec3(red);
-				}
-			}
-			mat.ubo.AddData(posArr, area);
-			mat.ubo.AddData(colArr, area);
-			delete posArr;
-			delete colArr;
-
-			auto& trans = ecs::entities.emplace<components::CompTransform2D>(entity);
-
-			trans.position = { 0, 0 };
-			trans.rotation = 0;
-			trans.scale = { 1, 1 };
 		}
 	}
 
@@ -156,7 +112,7 @@ namespace powd
 				transform.test += speed * dt;
 			}
 
-			Logger::Log(profiling::GetProfileDataStr());
+			//Logger::Log(profiling::GetProfileDataStr());
 		}
 	};
 

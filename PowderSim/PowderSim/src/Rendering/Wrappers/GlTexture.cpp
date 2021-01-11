@@ -49,6 +49,8 @@ namespace powd::rendering
 
 		referenceCounter = _o.referenceCounter;
 		*referenceCounter++;
+
+		return *this;
 	}
 	GlTexture& GlTexture::operator =(GlTexture&& _o)
 	{
@@ -59,6 +61,8 @@ namespace powd::rendering
 		std::swap(height, _o.height);
 		std::swap(file, _o.file);
 		std::swap(referenceCounter, _o.referenceCounter);
+
+		return *this;
 	}
 	GlTexture::~GlTexture()
 	{
