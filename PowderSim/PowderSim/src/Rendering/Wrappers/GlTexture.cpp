@@ -24,6 +24,9 @@ namespace powd::rendering
 		mipmap = _mipmap;
 
 		referenceCounter = new unsigned(1);
+
+		glPixelStorei(GL_PACK_ALIGNMENT, 1);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	}
 	GlTexture::GlTexture(GlTexture& _o)
 	{
@@ -169,7 +172,7 @@ namespace powd::rendering
 		SOIL_free_image_data(image);
 	}
 
-	void GlTexture2D::Draw(int _xOff, int _yOff, int _width, int _height, unsigned char* _data)
+	void GlTexture2D::Draw(int _xOff, int _yOff, int _width, int _height, std::vector<unsigned char> _data)
 	{
 		GLenum format;
 		switch(textureFormat)
@@ -183,7 +186,7 @@ namespace powd::rendering
 		}
 
 		glBindTexture(textureType, textureId);
-		glTexSubImage2D(textureType, 0, _xOff, _yOff, _width, _height, format, GL_UNSIGNED_BYTE, _data);
+		glTexSubImage2D(textureType, 0, _xOff, _yOff, _width, _height, format, GL_UNSIGNED_BYTE, _data.data());
 	}
 
 	void GlTexture2D::Read(int _xOff, int _yOff, int _width, int _height, void* _dataIn)

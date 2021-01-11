@@ -59,10 +59,7 @@ namespace powd
 			texture->SetParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			texture->Bind();
 
-			texture->Draw({ 0, 0 }, { 1, 1 }, { 255, 0, 0 });
-			texture->Draw({ 127, 0 }, { 1, 1 }, { 255, 0, 0 });
-			texture->Draw({ 0, 71 }, { 1, 1 }, { 255, 0, 0 });
-			texture->Draw({ 127, 71 }, { 1, 1 }, { 255, 0, 0 });
+			texture->Draw({ 0, 0 }, { 1, 3 }, { 255, 0, 0, 0, 255, 0, 0, 0, 255 });
 
 			auto entity = ecs::entities.create();
 			auto& mat = ecs::entities.emplace<components::CompRenderMaterial>(entity);

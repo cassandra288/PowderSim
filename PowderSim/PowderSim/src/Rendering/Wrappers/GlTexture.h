@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -54,9 +55,8 @@ namespace powd::rendering
 
 		void LoadFile(std::string _filename);
 
-		void Draw(glm::ivec2 _off, glm::ivec2 _size, glm::uvec3 _data) { Draw(_off.x, _off.y, _size.x, _size.y, (unsigned char*)glm::value_ptr(_data)); }
-		void Draw(glm::ivec2 _off, glm::ivec2 _size, glm::uvec4 _data) { Draw(_off.x, _off.y, _size.x, _size.y, (unsigned char*)glm::value_ptr(_data)); }
-		void Draw(int _xOff, int _yOff, int _width, int _height, unsigned char* _data);
+		void Draw(glm::ivec2 _off, glm::ivec2 _size, std::vector<unsigned char> _data) { Draw(_off.x, _off.y, _size.x, _size.y, _data); }
+		void Draw(int _xOff, int _yOff, int _width, int _height, std::vector<unsigned char> _data);
 
 		void Read(glm::ivec2 _off, glm::ivec2 _size, void* _dataIn) { Read(_off.x, _off.y, _size.x, _size.y, _dataIn); }
 		void Read(int _xOff, int _yOff, int _width, int _height, void* _dataIn);
