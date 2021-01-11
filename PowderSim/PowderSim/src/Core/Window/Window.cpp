@@ -23,5 +23,17 @@ namespace powd::window
 	Window::~Window()
 	{
 		SDL_DestroyWindow(sdlWindow);
+
+		{
+			std::vector<Callback_Event> callbacks;
+			for (auto callbk : windowCallbacks)
+			{
+				callbacks.push_back(callbk.first);
+			}
+			for (auto callbk : callbacks)
+			{
+				RemoveWindowCallback(callbk);
+			}
+		}
 	}
 }

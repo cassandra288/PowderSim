@@ -24,7 +24,9 @@ USING_LOGGER
 
 
 namespace powd
-{
+{	
+	rendering::GlTexture2D* texture;
+
 	void OnStart()
 	{
 		new cpplog::Logger("log.txt", "Main", 4);
@@ -37,59 +39,43 @@ namespace powd
 
 
 		using namespace rendering;
-
-		static const float meshData1[6] = {
-			-0.5f, -0.5f,
-			0.5f, -0.5f,
-			0.f, 0.5f
-		};
-		static const float meshData2[12] = {
-			-0.5f, -0.5f,
-			0.5f, -0.5f,
-			-0.5f, 0.5f,
-			-0.5f, 0.5f,
-			0.5f, -0.5f,
-			0.5f, 0.5f
-		};
-		GlMeshID mesh = GlVertexCache::CreateMesh((void*)meshData1, 6 * sizeof(float), {}, 0);
-		GlMeshID mesh2 = GlVertexCache::CreateMesh((void*)meshData2, 12 * sizeof(float), {}, 0);
-		GlShader* shader = new GlShader("shader.vert", "shader.frag");
-		shader->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
-		shader->BuildVAO();
-
-		glm::vec3 red(1, 0, 0);
-		glm::vec3 green(0, 1, 0);
-
 		{
-			auto entity1 = ecs::entities.create();
-			auto& mat1 = ecs::entities.emplace<components::CompRenderMaterial>(entity1);
+			static const float meshData[24] = {
+				-0.5f, -0.5f, 0.f, 0.f,
+				0.5f, -0.5f, 1.f, 0.f,
+				-0.5f, 0.5f, 0.f, 1.f,
+				-0.5f, 0.5f, 0.f, 1.f,
+				0.5f, -0.5f, 1.f, 0.f,
+				0.5f, 0.5f, 1.f, 1.f
+			};
+			GlMeshID mesh = GlVertexCache::CreateMesh((void*)meshData, 24 * sizeof(float), {}, 0);
+			GlShader* shader = new GlShader("powder_texture.vert", "powder_texture.frag");
+			shader->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
+			shader->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
+			shader->BuildVAO();
 
-			mat1.mesh = mesh;
-			mat1.shader = shader;
-			mat1.ubo.AddData(&red);
+			texture = new GlTexture2D(0, GlTextureFormat::RGB, 128, 72, false);
+			texture->SetParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			texture->SetParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			texture->Bind();
 
-			auto& trans = ecs::entities.emplace<components::CompTransform2D>(entity1);
+			texture->Draw({ 0, 0 }, { 1, 1 }, { 255, 0, 0 });
+			texture->Draw({ 127, 0 }, { 1, 1 }, { 255, 0, 0 });
+			texture->Draw({ 0, 71 }, { 1, 1 }, { 255, 0, 0 });
+			texture->Draw({ 127, 71 }, { 1, 1 }, { 255, 0, 0 });
+
+			auto entity = ecs::entities.create();
+			auto& mat = ecs::entities.emplace<components::CompRenderMaterial>(entity);
+
+			mat.mesh = mesh;
+			mat.shader = shader;
+			mat.textures.push_back(texture);
+
+			auto& trans = ecs::entities.emplace<components::CompTransform2D>(entity);
 
 			trans.position = { 0, 0 };
 			trans.rotation = 0;
-			trans.scale = { 1, 1 };
-		}
-
-		{
-			auto entity2 = ecs::entities.create();
-			auto& mat2 = ecs::entities.emplace<components::CompRenderMaterial>(entity2);
-
-			mat2.mesh = mesh2;
-			mat2.shader = shader;
-			mat2.ubo.AddData(&green);
-
-			auto& trans = ecs::entities.emplace<components::CompTransform2D>(entity2);
-
-			trans.position = { 5, 5 };
-			trans.rotation = 45;
-			trans.scale = { 2, 2 };
-
-			trans.startX = 5;
+			trans.scale = { 1280, 720 };
 		}
 	}
 
@@ -104,13 +90,13 @@ namespace powd
 	public:
 		System_Tick(dt)
 		{
-			for (entt::entity entity : ecs::entities.view<components::CompTransform2D>())
+			/*for (entt::entity entity : ecs::entities.view<components::CompTransform2D>())
 			{
 				auto& transform = ecs::entities.get<components::CompTransform2D>(entity);
 
 				transform.position.x = transform.startX + (sin(transform.test) * scale);
 				transform.test += speed * dt;
-			}
+			}*/
 
 			//Logger::Log(profiling::GetProfileDataStr());
 		}

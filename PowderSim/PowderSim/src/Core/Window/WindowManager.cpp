@@ -98,7 +98,7 @@ namespace powd::window
 	
 	int FlushEvents()
 	{
-		std::lock_guard<std::mutex>lck(mut);
+		//std::lock_guard<std::mutex>lck(mut); need to remove this for now because of event callbacks
 
 		SDL_PumpEvents();
 
@@ -114,6 +114,7 @@ namespace powd::window
 				if (instanceMap.find(e.window.windowID) == instanceMap.end())
 					continue;
 				Window* relevantWindow = instanceMap[e.window.windowID];
+				bool closed = false;
 				switch (e.window.event)
 				{
 				case SDL_WINDOWEVENT_RESIZED:
@@ -132,7 +133,16 @@ namespace powd::window
 					relevantWindow->closedCallback();
 					delete instanceMap[e.window.windowID];
 					instanceMap.erase(e.window.windowID);
+					closed = true;
 					break;
+				}
+
+				if (!closed)
+				{
+					for (auto callback : relevantWindow->windowCallbacks)
+					{
+						callback.first(e, callback.second);
+					}
 				}
 			}
 		}

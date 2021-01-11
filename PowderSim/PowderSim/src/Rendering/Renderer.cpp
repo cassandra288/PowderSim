@@ -15,7 +15,6 @@
 
 USING_LOGGER
 using namespace powd::components;
-//TODO: GlTexture
 
 
 namespace powd::rendering
@@ -125,6 +124,11 @@ namespace powd::rendering
 
 			_material.shader->UseProgram();
 
+			for (GlTexture* _texture : _material.textures)
+			{
+				_texture->Bind();
+			}
+
 			_material.coreUbo.Bind(2);
 			_material.ubo.Bind(3);
 
@@ -151,12 +155,15 @@ namespace powd::rendering
 		glDebugMessageCallback(OpenGLDebugCallback, nullptr);
 
 		glViewport(0, 0, window::GetInstance(window::mainWindow)->getWidth(), window::GetInstance(window::mainWindow)->getHeight());
+		window::GetInstance(window::mainWindow)->AddWindowCallback([](SDL_Event e, void* _data) {
+			glViewport(0, 0, window::GetInstance(window::mainWindow)->getWidth(), window::GetInstance(window::mainWindow)->getHeight());
+		});
 
 		GlVertexCache::Setup();
 
 		renderData = new RenderData();
 
-		glm::vec2 viewportSize(64, 36);
+		glm::vec2 viewportSize(640, 360);
 		renderData->coreRenderData.AddData(&viewportSize);
 	}
 

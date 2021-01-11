@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <mutex>
+#include <unordered_map>
 
 #include <SDL2/SDL.h>
 
@@ -10,6 +11,7 @@
 namespace powd::window
 {
 	typedef void(*Callback_Close)();
+	typedef void(*Callback_Event)(SDL_Event, void*);
 
 	class Window
 	{
@@ -21,6 +23,7 @@ namespace powd::window
 		bool minimized = false;
 		Callback_Close closedCallback;
 		SDL_GLContext glContext;
+		std::unordered_map<Callback_Event, void*> windowCallbacks;
 
 		std::mutex mut;
 
@@ -56,6 +59,36 @@ namespace powd::window
 
 		uint32_t GetID() { std::lock_guard<std::mutex>lck(mut); return SDL_GetWindowID(sdlWindow); }
 		bool IsMinimized() { std::lock_guard<std::mutex>lck(mut);  minimized; }
+
+		void AddWindowCallback(Callback_Event _callbk, void* _userData = nullptr, unsigned _userDataSize = 0)
+		{
+			if (_userData == nullptr)
+			{
+				windowCallbacks[_callbk] = nullptr;
+			}
+			else
+			{
+				char* newData = new char[_userDataSize];
+				char* oldData = (char*)_userData;
+
+				for (unsigned i = 0; i < _userDataSize; i++)
+				{
+					newData[i] = oldData[i];
+				}
+
+				windowCallbacks[_callbk] = newData;
+			}
+		}
+		void RemoveWindowCallback(Callback_Event _callbk)
+		{
+			if (windowCallbacks[_callbk] != nullptr)
+			{
+				char* userData = (char*)windowCallbacks[_callbk];
+				delete[] userData;
+			}
+
+			windowCallbacks.erase(_callbk);
+		}
 
 
 		friend uint32_t StartWindow(
