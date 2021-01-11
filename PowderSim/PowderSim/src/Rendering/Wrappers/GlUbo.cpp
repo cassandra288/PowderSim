@@ -160,7 +160,78 @@ namespace powd::rendering
 		}
 
 		glBindBuffer(GL_COPY_READ_BUFFER, UBO);
-		glBufferSubData(GL_COPY_READ_BUFFER, _data->dataOffset, _data->dataSize, _rawData);
+
+		unsigned typeSize = 0;
+		if (TestMask(_data->typeMask, Float)) typeSize = sizeof(GLfloat);
+		else if (TestMask(_data->typeMask, Int)) typeSize = sizeof(GLint);
+		else if (TestMask(_data->typeMask, Uint)) typeSize = sizeof(GLuint);
+
+		unsigned matX, matY;
+		{
+			auto tmp = GetMatrixSizes(_data->matSize);
+			matX = tmp.first;
+			matY = tmp.second;
+		}
+
+		void* newData = new char[_data->dataSize];
+		if (TestMask(_data->typeMask, Basic))
+		{
+			if (TestMask(_data->typeMask, Single))
+			{
+				memcpy(newData, _rawData, typeSize);
+			}
+			else
+			{
+				unsigned elementSize = typeSize * 4; // rounds up to vec4 alignmnet
+
+				for (unsigned int i = 0; i < _data->arrayCount; i++)
+				{
+					memcpy((char*)newData + (elementSize * i), (char*)_rawData + (typeSize * i), typeSize);
+				}
+			}
+		}
+		else if (TestMask(_data->typeMask, Vec))
+		{
+			if (TestMask(_data->typeMask, Single))
+			{
+				memcpy(newData, _rawData, typeSize * matX);
+			}
+			else
+			{
+				unsigned elementSize = typeSize * 4;
+
+				for (unsigned int i = 0; i < _data->arrayCount; i++)
+				{
+					memcpy((char*)newData + (elementSize * i), (char*)_rawData + (typeSize * matX * i), typeSize * matX);
+				}
+			}
+		}
+		else if (TestMask(_data->typeMask, Mat))
+		{
+			unsigned rows = matX;
+			unsigned cols = matY;
+			if (_data->typeMask & Single)
+			{
+				unsigned elementSize = typeSize * 4;
+
+				for (unsigned int i = 0; i < rows; i++)
+				{
+					memcpy((char*)newData + (elementSize * i), (char*)_rawData + (typeSize * cols * i), typeSize * cols);
+				}
+			}
+			else
+			{
+				unsigned elementSize = typeSize * 4;
+				rows *= _data->arrayCount;
+
+				for (unsigned int i = 0; i < rows; i++)
+				{
+					memcpy((char*)newData + (elementSize * i), (char*)_rawData + (typeSize * cols * i), typeSize * cols);
+				}
+			}
+		}
+		
+		glBufferSubData(GL_COPY_READ_BUFFER, _data->dataOffset, _data->dataSize, newData);
 	}
 	void GlUbo::RemakeUBO(UboData* _change, void* _newData)
 	{

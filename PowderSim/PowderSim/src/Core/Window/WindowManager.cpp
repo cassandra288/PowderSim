@@ -4,6 +4,8 @@
 #include <mutex>
 
 #include <CppLog/Logger.h>
+
+#include "src/Core/Exceptions/GenericExceptions.h"
 USING_LOGGER
 
 
@@ -69,6 +71,9 @@ namespace powd::window
 
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+
+		/*if (SDL_GL_SetSwapInterval(0) != 0)
+			throw exceptions::GenericException("Failed to disable VSync.", __FILE__, __LINE__);*/
 
 		sdlStarted = true;
 	}

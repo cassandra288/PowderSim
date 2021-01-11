@@ -7,6 +7,8 @@
 #include "src/Core/Math/CommonMath.h"
 #include "src/Core/Window/WindowManager.h"
 #include "src/Core/Ecs/SystemProtoFunctions.h"
+#include "src/Core/Profiling/CPUProfiler.h"
+#include <CppLog/Logger.h>
 
 
 #define TIMEPOINT_VARS(__name__)	std::chrono::steady_clock::time_point __name__; \
@@ -68,12 +70,14 @@ namespace powd::dispatch
 		std::chrono::steady_clock::time_point currentTime;
 		float dt;
 
-		const std::chrono::milliseconds roughness(100); // thread waiting isn't precise and therefor we need some roughness to our times
+		const std::chrono::milliseconds roughness(100); // thread waiting isn't precise and therefor we need some roughness to our time
 
 		while (running)
 		{
 			if (std::chrono::steady_clock::now() >= nextUpdate)
 			{
+				profiling::intern::StartFrame();
+
 				nextUpdate += timerIncrement;
 
 				currentTime = std::chrono::steady_clock::now();
@@ -83,17 +87,23 @@ namespace powd::dispatch
 				if (!running)
 					break;
 
-				while (currentTime >= timepoints.tick - roughness)
+				if (currentTime >= timepoints.tick - roughness)
 				{
-					ecs::system::RunSystems_PreTick(1.f / tickFrequency);
-					ecs::system::RunSystems_Tick(1.f / tickFrequency);
-					ecs::system::RunSystems_PostTick(1.f / tickFrequency);
+					profiling::StartSectionProfile("Tick Loop");
+					while (currentTime >= timepoints.tick - roughness)
+					{
+						ecs::system::RunSystems_PreTick(1.f / tickFrequency);
+						ecs::system::RunSystems_Tick(1.f / tickFrequency);
+						ecs::system::RunSystems_PostTick(1.f / tickFrequency);
 
-					timepoints.tick += std::chrono::nanoseconds(1000000000 / tickFrequency);
+						timepoints.tick += std::chrono::nanoseconds(1000000000 / tickFrequency);
+					}
+					profiling::StopSectionProfile();
 				}
 
 				if (currentTime >= timepoints.render - roughness)
 				{
+					profiling::StartSectionProfile("Render Loop");
 					dt = GetDeltaTime(currentTime, timepoints.renderLast);
 
 					ecs::system::RunSystems_PreRender(dt);
@@ -102,11 +112,14 @@ namespace powd::dispatch
 
 					timepoints.renderLast = currentTime;
 					timepoints.render = currentTime + std::chrono::nanoseconds(1000000000 / renderFrequency);
+					profiling::StopSectionProfile();
 				}
 
 
 				lastTime = currentTime;
 				std::this_thread::sleep_until(nextUpdate - roughness);
+
+				profiling::StopSectionProfile();
 			}
 		}
 	}

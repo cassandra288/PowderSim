@@ -81,6 +81,15 @@ namespace powd::rendering
 
 		void Bind(unsigned _i);
 
+		unsigned GetUBORawSize()
+		{
+			return (*uboData)[uboData->size() - 1]->dataOffset + (*uboData)[uboData->size() - 1]->dataSize;
+		}
+		unsigned GetUBODataCount()
+		{
+			return uboData->size();
+		}
+
 
 	public:
 		template<typename T>

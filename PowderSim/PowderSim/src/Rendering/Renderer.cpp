@@ -1,14 +1,20 @@
 #include "Renderer.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtx/matrix_transform_2d.hpp>
 #include <GL/glew.h>
 #include <CppLog/Logger.h>
 
 #include "src/Core/Exceptions/RenderingExceptions.h"
 #include "src/Core/Window/WindowManager.h"
 #include "src/Core/Ecs/EntityRegistry.h"
-#include "CompRenderMaterial.h"
+#include "src/Core/Ecs/SystemProto.h"
+#include "src/Core/Components/CompRenderMaterial.h"
+#include "src/Core/Components/CompTransform2D.h"
+#include "src/Core/Profiling/CPUProfiler.h"
 
 USING_LOGGER
+using namespace powd::components;
 //TODO: GlTexture
 
 
@@ -17,6 +23,12 @@ namespace powd::rendering
 	namespace
 	{
 		SDL_GLContext glContext;
+
+		struct RenderData
+		{
+			GlUbo coreRenderData;
+		};
+		RenderData* renderData;
 
 		auto renderableView = ecs::entities.view<CompRenderMaterial>(); // TODO: Implement some UI component that can help diffrentiate between world and screenspace rendering
 
@@ -48,16 +60,79 @@ namespace powd::rendering
 		}
 	}
 
-
-	void RenderObject(CompRenderMaterial& material)
+	class SysMeshRenderer : ecs::SystemProto
 	{
-		material.shader->UseProgram();
+		DEFINE_SYSTEM_PROTO(SysMeshRenderer);
 
-		material.coreUbo.Bind(2);
-		material.ubo.Bind(3);
+	public:
+		System_Render(dt)
+		{
+			RenderFrame();
+		}
 
-		glDrawArrays(GL_TRIANGLES, GlVertexCache::GetVertexOffset(material.mesh) / material.shader->GetVAOStride(), GlVertexCache::GetVertexSize(material.mesh) / material.shader->GetVAOStride());
-	}
+
+	private:
+		void RenderFrame()
+		{
+			glDepthMask(true);
+			glClearColor(0.f, 0.f, 0.f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+			GlVertexCache::RebindBuffers();
+			renderData->coreRenderData.Bind(0);
+			
+			glDepthFunc(GL_LESS);
+			for (auto entity : renderableView)
+			{
+				RenderObject(ecs::entities.get<CompRenderMaterial>(entity));
+			}
+
+			profiling::PauseSection();
+			SDL_GL_SwapWindow(window::GetInstance(window::mainWindow)->getWindow());
+			profiling::UnpauseSection();
+			glFlush();
+		}
+
+		void GetCoreObjectData(CompRenderMaterial& _material)
+		{
+			if (_material.coreUbo.GetUBODataCount() != 1)
+			{
+				_material.coreUbo.SetUBOSize(1);
+			}
+
+			glm::mat3 modelMat(1.0f);
+
+			CompTransform2D* transform = ecs::entities.try_get<CompTransform2D>(entt::to_entity(ecs::entities, _material));
+			if (transform == nullptr)
+			{
+				modelMat = glm::translate(modelMat, { 0, 0 });
+				modelMat = glm::rotate(modelMat, 0.f);
+				modelMat = glm::scale(modelMat, { 1, 1 });
+			}
+			else
+			{
+				modelMat = glm::translate(modelMat, transform->position);
+				modelMat = glm::rotate(modelMat, transform->rotation);
+				modelMat = glm::scale(modelMat, transform->scale);
+			}
+
+			_material.coreUbo.ModifyData(0, &modelMat);
+		}
+
+		void RenderObject(CompRenderMaterial& _material)
+		{
+			GetCoreObjectData(_material);
+
+			_material.shader->UseProgram();
+
+			_material.coreUbo.Bind(2);
+			_material.ubo.Bind(3);
+
+			glDrawArraysInstanced(GL_TRIANGLES, GlVertexCache::GetVertexOffset(_material.mesh) / _material.shader->GetVAOStride(), GlVertexCache::GetVertexSize(_material.mesh) / _material.shader->GetVAOStride(), _material.instanceCount);
+		}
+	};
+	IMPLEMENT_SYSTEM_PROTO(SysMeshRenderer);
+
 
 
 	void StartRenderer()
@@ -78,24 +153,11 @@ namespace powd::rendering
 		glViewport(0, 0, window::GetInstance(window::mainWindow)->getWidth(), window::GetInstance(window::mainWindow)->getHeight());
 
 		GlVertexCache::Setup();
-	}
 
-	void RenderFrame()
-	{
-		glDepthMask(true);
-		glClearColor(0.f, 0.f, 0.f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		renderData = new RenderData();
 
-		GlVertexCache::RebindBuffers();
-
-		glDepthFunc(GL_LESS);
-		for (auto entity : renderableView)
-		{
-			RenderObject(ecs::entities.get<CompRenderMaterial>(entity));
-		}
-
-		SDL_GL_SwapWindow(window::GetInstance(window::mainWindow)->getWindow());
-		glFlush();
+		glm::vec2 viewportSize(64, 36);
+		renderData->coreRenderData.AddData(&viewportSize);
 	}
 
 	void StopRenderer()

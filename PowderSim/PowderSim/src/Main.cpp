@@ -14,7 +14,10 @@
 #include "src/Rendering/Renderer.h"
 
 #include "src/Core/Ecs/EntityRegistry.h"
-#include "src/Rendering/CompRenderMaterial.h"
+#include "src/Core/Components/CompRenderMaterial.h"
+#include "src/Core/Components/CompTransform2D.h"
+
+#include "src/Core/Profiling/CPUProfiler.h"
 
 USING_LOGGER
 
@@ -35,88 +38,126 @@ namespace powd
 		using namespace rendering;
 
 		static const float meshData1[6] = {
-			-1.f, -1.f,
-			0.f, -1.f,
-			-0.5f, 0.f
+			-0.5f, -0.5f,
+			0.5f, -0.5f,
+			0.f, 0.5f
 		};
 		static const float meshData2[12] = {
-			0.f, 0.f,
-			1.f, 0.f,
-			0.f, 1.f,
-			0.f, 1.f,
-			1.f, 0.f,
-			1.f, 1.f
+			-0.5f, -0.5f,
+			0.5f, -0.5f,
+			-0.5f, 0.5f,
+			-0.5f, 0.5f,
+			0.5f, -0.5f,
+			0.5f, 0.5f
 		};
 		GlMeshID mesh = GlVertexCache::CreateMesh((void*)meshData1, 6 * sizeof(float), {}, 0);
 		GlMeshID mesh2 = GlVertexCache::CreateMesh((void*)meshData2, 12 * sizeof(float), {}, 0);
 		GlShader* shader = new GlShader("shader.vert", "shader.frag");
 		shader->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
 		shader->BuildVAO();
+		GlShader* shader2 = new GlShader("inst_shader.vert", "inst_shader.frag");
+		shader2->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
+		shader2->BuildVAO();
 
 		glm::vec3 red(1, 0, 0);
 		glm::vec3 green(0, 1, 0);
 
-		glm::vec3 test1(0, 1, 2);
-		glm::vec3 test2[] = { {3, 4, 5}, {6, 7, 8} };
-		glm::mat2x2 test3 = glm::mat2x2(9, 10, 11, 12); // 9  11
-														// 10 12
-		glm::mat2x2 test4[] = { {13, 14, 15, 16}, {17, 18, 19, 20} };
-		float tests[] = { 21, 22, 23, 24, 25 };
+		/*{
+			auto entity1 = ecs::entities.create();
+			auto& mat1 = ecs::entities.emplace<components::CompRenderMaterial>(entity1);
 
-		auto entity1 = ecs::entities.create();
-		auto entity2 = ecs::entities.create();
-		auto& mat1 = ecs::entities.emplace<rendering::CompRenderMaterial>(entity1);
+			mat1.mesh = mesh;
+			mat1.shader = shader;
+			mat1.ubo.AddData(&red);
 
-		mat1.mesh = mesh;
-		mat1.shader = shader;
-		mat1.renderPos = glm::vec2(0, 0);
-		mat1.ubo.AddData(&red);
+			auto& trans = ecs::entities.emplace<components::CompTransform2D>(entity1);
 
-		mat1.ubo.AddData(&test1);
-		mat1.ubo.AddData(test2, 2);
-		mat1.ubo.AddData(&test3);
-		mat1.ubo.AddData(test4, 2);
-		for (unsigned i = 0; i < 2; i++)
-		{
-			mat1.ubo.AddData(&tests[i]);
+			trans.position = { 0, 0 };
+			trans.rotation = 0;
+			trans.scale = { 1, 1 };
 		}
-		mat1.ubo.MarkStructEnd();
-		for (unsigned i = 2; i < 4; i++)
-		{
-			mat1.ubo.AddData(&tests[i]);
-		}
-		mat1.ubo.MarkStructEnd();
-		mat1.ubo.AddData(&tests[4]);
-		
-		auto& mat2 = ecs::entities.emplace<rendering::CompRenderMaterial>(entity2);
 
-		mat2.mesh = mesh2;
-		mat2.shader = shader;
-		mat2.renderPos = glm::vec2(0, 0);
-		mat2.ubo.AddData(&green);
+		{
+			auto entity2 = ecs::entities.create();
+			auto& mat2 = ecs::entities.emplace<components::CompRenderMaterial>(entity2);
 
-		mat2.ubo.AddData(&test1);
-		mat2.ubo.AddData(test2, 2);
-		mat2.ubo.AddData(&test3);
-		mat2.ubo.AddData(test4, 2);
-		for (unsigned i = 0; i < 2; i++)
+			mat2.mesh = mesh2;
+			mat2.shader = shader;
+			mat2.ubo.AddData(&green);
+
+			auto& trans = ecs::entities.emplace<components::CompTransform2D>(entity2);
+
+			trans.position = { 5, 5 };
+			trans.rotation = 45;
+			trans.scale = { 2, 2 };
+
+			trans.startX = 5;
+		}*/
+
 		{
-			mat2.ubo.AddData(&tests[i]);
+			auto entity = ecs::entities.create();
+			auto& mat = ecs::entities.emplace<components::CompRenderMaterial>(entity);
+
+			mat.mesh = mesh2;
+			mat.shader = shader2;
+			mat.instanceCount = 100;
+
+			const unsigned xSize = 48;
+			constexpr unsigned ySize = ((float)xSize / 16.f) * 9.f;
+			constexpr unsigned area = xSize * ySize;
+			glm::vec2* posArr = new glm::vec2[area];
+			glm::vec3* colArr = new glm::vec3[area];
+			for (unsigned ix = 0; ix < xSize; ix++)
+			{
+				for (unsigned iy = 0; iy < ySize; iy++)
+				{
+					glm::vec2 pos((int)ix - xSize/2, (int)iy - ySize/2);
+					posArr[(ix * xSize) + iy] = pos;
+
+					int tmp = ix;
+					if (iy % 2 == 0)
+						tmp -= 1;
+
+					if (tmp % 2 == 0)
+						colArr[(ix * xSize) + iy] = glm::vec3(green);
+					else
+						colArr[(ix * xSize) + iy] = glm::vec3(red);
+				}
+			}
+			mat.ubo.AddData(posArr, area);
+			mat.ubo.AddData(colArr, area);
+			delete posArr;
+			delete colArr;
+
+			auto& trans = ecs::entities.emplace<components::CompTransform2D>(entity);
+
+			trans.position = { 0, 0 };
+			trans.rotation = 0;
+			trans.scale = { 1, 1 };
 		}
-		mat2.ubo.MarkStructEnd();
-		for (unsigned i = 2; i < 4; i++)
-		{
-			mat2.ubo.AddData(&tests[i]);
-		}
-		mat2.ubo.MarkStructEnd();
-		mat2.ubo.AddData(&tests[4]);
 	}
 
 	class TestSystem : ecs::SystemProto
 	{
 		DEFINE_SYSTEM_PROTO(TestSystem);
 
+	private:
+		const float scale = 1;
+		const float speed = 180.f;
+
 	public:
+		System_Tick(dt)
+		{
+			for (entt::entity entity : ecs::entities.view<components::CompTransform2D>())
+			{
+				auto& transform = ecs::entities.get<components::CompTransform2D>(entity);
+
+				transform.position.x = transform.startX + (sin(transform.test) * scale);
+				transform.test += speed * dt;
+			}
+
+			Logger::Log(profiling::GetProfileDataStr());
+		}
 	};
 
 	void OnStop()
@@ -134,7 +175,7 @@ namespace powd
 		{
 			OnStart();
 
-			auto mat = ecs::entities.get<rendering::CompRenderMaterial>(entt::entity(0));
+			auto mat = ecs::entities.get<components::CompRenderMaterial>(entt::entity(0));
 
 			dispatch::CoreLoop();
 

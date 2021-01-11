@@ -26,7 +26,7 @@ namespace powd::rendering
 	{
 	private:
 		static unsigned VBO;
-		static unsigned EBO;
+		static unsigned EBO; // TODO: Make EBO work or remove EBO
 		static std::vector<GlMeshData*> meshes;
 		static unsigned VBOSize;
 		static unsigned EBOSize;
