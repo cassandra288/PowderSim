@@ -61,6 +61,10 @@ namespace powd
 
 			texture->Draw({ 0, 0 }, { 1, 3 }, { 255, 0, 0, 0, 255, 0, 0, 0, 255 });
 
+			unsigned char data[3];
+			texture->Read({ 0, 1 }, { 1, 1 }, data);
+			Logger::Lock() << (int)data[0] << ", " << (int)data[1] << ", " << (int)data[2] << Logger::endl;
+
 			auto entity = ecs::entities.create();
 			auto& mat = ecs::entities.emplace<components::CompRenderMaterial>(entity);
 

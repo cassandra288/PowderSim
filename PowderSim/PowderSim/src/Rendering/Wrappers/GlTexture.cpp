@@ -208,8 +208,7 @@ namespace powd::rendering
 		unsigned dataSize = _width * _height * size;
 		dataSize *= sizeof(unsigned char);
 
-		glBindTexture(textureType, textureId);
-		glGetTextureSubImage(textureType, 0, _xOff, _yOff, 0, _width, _height, 1, format, GL_UNSIGNED_BYTE, dataSize, _dataIn);
+		glGetTextureSubImage(textureId, 0, _xOff, _yOff, 0, _width, _height, 1, format, GL_UNSIGNED_BYTE, dataSize, _dataIn);
 	}
 #pragma endregion
 }
