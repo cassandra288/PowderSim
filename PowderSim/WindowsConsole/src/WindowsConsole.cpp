@@ -1,6 +1,7 @@
-#include <iostream>
+#include "src/Main.h"
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	return powd::Main();
 }

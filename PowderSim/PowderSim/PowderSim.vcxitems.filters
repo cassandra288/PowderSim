@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{7791f6b7-a123-46d1-982d-a90e17520f33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Core">
+      <UniqueIdentifier>{998752ce-1516-4b59-bb3d-8930e1711128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Core\Window">
+      <UniqueIdentifier>{0b8d24f9-61f4-45dd-9a16-386c5499f58f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Core\Dispatching">
+      <UniqueIdentifier>{d9876c99-e1b9-4463-b910-4e7680c9d8e3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProtoFunctions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Main.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Math\CommonMath.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Renderer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\RenderingExceptions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\BaseException.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\StringUtils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\GenericExceptions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlVertexCache.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlUbo.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlShader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Ecs\EntityRegistry.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Components\CompRenderMaterial.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Components\CompTransform2D.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Main.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Renderer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlVertexCache.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlUbo.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlShader.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\EntityRegistry.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.cpp" />
+  </ItemGroup>
+</Project>

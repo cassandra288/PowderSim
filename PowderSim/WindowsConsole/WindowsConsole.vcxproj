@@ -98,19 +98,20 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)#in\Win\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)#in\Win\Include\;$(SolutionDir)#in\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)#in\Lnx\Lib\x86;$(SolutionDir)#in\Win\Lib\agn;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)#in\Win\Lib\x86;$(SolutionDir)#in\Win\Lib\agn;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;glew32.lib;SDL2.lib;CppLog_d.lib;soil2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>call $(SolutionDir)##buildsteps\MakeWD.bat $(DebuggerWorkingDirectory)\</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\agn\\ $(OutDir)\ so
-call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\x86\\ $(OutDir)\ so</Command>
+      <Command>call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Win\Bin\agn\\ $(OutDir)\ dll
+call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Win\Bin\x86\\ $(OutDir)\ dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -122,21 +123,22 @@ call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\x86\\
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)#in\Win\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)#in\Win\Include\;$(SolutionDir)#in\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)#in\Lnx\Lib\x86;$(SolutionDir)#in\Win\Lib\agn;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)#in\Win\Lib\x86;$(SolutionDir)#in\Win\Lib\agn;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;glew32.lib;SDL2.lib;CppLog.lib;soil2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>call $(SolutionDir)##buildsteps\MakeWD.bat $(DebuggerWorkingDirectory)\</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\agn\\ $(OutDir)\ so
-call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\x86\\ $(OutDir)\ so</Command>
+      <Command>call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Win\Bin\agn\\ $(OutDir)\ dll
+call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Win\Bin\x86\\ $(OutDir)\ dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -146,19 +148,20 @@ call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\x86\\
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)#in\Win\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)#in\Win\Include\;$(SolutionDir)#in\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)#in\Lnx\Lib\x64;$(SolutionDir)#in\Win\Lib\agn;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)#in\Win\Lib\x64;$(SolutionDir)#in\Win\Lib\agn;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;glew32.lib;SDL2.lib;CppLog.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>call $(SolutionDir)##buildsteps\MakeWD.bat $(DebuggerWorkingDirectory)\</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\agn\\ $(OutDir)\ so
-call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\x64\\ $(OutDir)\ so</Command>
+      <Command>call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Win\Bin\agn\\ $(OutDir)\ dll
+call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Win\Bin\x64\\ $(OutDir)\ dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -170,21 +173,22 @@ call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\x64\\
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)#in\Win\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)#in\Win\Include\;$(SolutionDir)#in\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)#in\Lnx\Lib\x64;$(SolutionDir)#in\Win\Lib\agn;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)#in\Win\Lib\x64;$(SolutionDir)#in\Win\Lib\agn;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.lib;glew32.lib;SDL2.lib;CppLog.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>call $(SolutionDir)##buildsteps\MakeWD.bat $(DebuggerWorkingDirectory)\</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\agn\\ $(OutDir)\ so
-call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Lnx\Bin\x64\\ $(OutDir)\ so</Command>
+      <Command>call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Win\Bin\agn\\ $(OutDir)\ dll
+call $(SolutionDir)##buildsteps\CopyBinaries.bat $(SolutionDir)#in\Win\Bin\x64\\ $(OutDir)\ dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
