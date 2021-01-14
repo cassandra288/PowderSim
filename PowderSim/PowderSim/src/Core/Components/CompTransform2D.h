@@ -8,11 +8,8 @@ namespace powd::components
 	struct CompTransform2D
 	{
 	public:
-		glm::vec2 position;
-		float rotation;
-		glm::vec2 scale;
-
-		unsigned test;
-		float startX;
+		glm::vec2 position = { 0, 0 };
+		float rotation = 0;
+		glm::vec2 scale = { 1, 1 };
 	};
 }
