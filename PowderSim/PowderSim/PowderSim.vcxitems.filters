@@ -36,6 +36,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\SandEngine\SandEngine.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\DataStructures\DualBlockArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />

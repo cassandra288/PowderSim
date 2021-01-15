@@ -1,2 +1,3 @@
 ID = "core:test";
 Name = "Test";
+DisplayColor = 0,255,0;

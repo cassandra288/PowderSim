@@ -24,6 +24,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\RenderingExceptions.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Math\CommonMath.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\DataStructures\DualBlockArray.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\StringUtils.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Main.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.h" />

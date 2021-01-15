@@ -120,6 +120,8 @@ namespace powd::dispatch
 				std::this_thread::sleep_until(nextUpdate - roughness);
 
 				profiling::StopSectionProfile();
+
+				//cpplog::Logger::Log(profiling::GetProfileDataStr());
 			}
 		}
 	}

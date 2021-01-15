@@ -7,19 +7,15 @@
 #include <CppLog/Logger.h>
 #include <SOIL2/SOIL2.h>
 
-#include "src/Core/Exceptions/RenderingExceptions.h"
 #include "src/Core/Window/WindowManager.h"
-#include "src/Core/Ecs/SystemProto.h"
 #include "src/Core/Dispatching/CoreLoops.h"	
-#include "src/Core/Utils/StringUtils.h"
 #include "src/Rendering/Renderer.h"
-
-#include "src/Core/Ecs/EntityRegistry.h"
-#include "src/Core/Components/CompRenderMaterial.h"
-#include "src/Core/Components/CompTransform2D.h"
-
 #include "src/SandEngine/SandEngine.h"
+#include "src/Core/Exceptions/BaseException.h"
 
+#include "src/Core/Utils/StringUtils.h"
+
+#include "src/Core/Ecs/SystemProto.h"
 #include "src/Core/Profiling/CPUProfiler.h"
 
 USING_LOGGER
@@ -27,6 +23,7 @@ USING_LOGGER
 
 namespace powd
 {
+	sand::Powder powd;
 	void OnStart()
 	{
 		new cpplog::Logger("log.txt", "Main", 4);
@@ -38,6 +35,8 @@ namespace powd
 		rendering::StartRenderer();
 
 		sand::SandEngineSetup();
+
+		sand::CreateNewPowder("Test", { 5, 5 }, powd);
 	}
 
 	class TestSystem : ecs::SystemProto
@@ -45,11 +44,18 @@ namespace powd
 		DEFINE_SYSTEM_PROTO(TestSystem);
 
 	private:
+		int tmp = 0;
 
 	public:
 		System_Tick(dt)
 		{
-			//Logger::Log(profiling::GetProfileDataStr());
+			tmp++;
+			tmp = tmp % 30;
+
+			if (tmp == 0)
+			{
+				sand::TranslatePowderPos({ 1, 0 }, powd);
+			}
 		}
 	};
 

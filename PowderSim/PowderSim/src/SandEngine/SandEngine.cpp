@@ -4,18 +4,22 @@
 #include <fstream>
 #include <filesystem>
 #include <vector>
+#include <unordered_set>
 
 #include <CppLog/Logger.h>
 #include <GL/glew.h>
 
 #include "src/Core/Exceptions/GenericExceptions.h"
 #include "src/Core/Utils/StringUtils.h"
+#include "src/Core/Utils/DataStructures/DualBlockArray.h"
 
+#include "src/Core/Ecs/SystemProto.h"
 #include "src/Core/Ecs/EntityRegistry.h"
 #include "src/Core/Components/CompRenderMaterial.h"
 #include "src/Core/Components/CompTransform2D.h"
 
 #include "src/Rendering/Wrappers/GlTexture.h"
+#include "src/Core/Profiling/CPUProfiler.h"
 
 USING_LOGGER;
 
@@ -27,6 +31,24 @@ namespace powd::sand
 	public:
 		std::string id = "";
 		std::string displayName = "";
+		glm::uvec3 displayColor = { 255, 255, 255 };
+	};
+
+	struct DirtyData
+	{
+	public:
+		glm::uvec2 pos;
+		glm::uvec3 color;
+	};
+
+	struct PowderData
+	{
+	public:
+		glm::uvec2 position = { 0, 0 };
+		std::string typeID = "";
+
+		Powder BlockArrayIndex;
+		glm::uvec2 prevPosition = { 0, 0 };
 	};
 
 	namespace
@@ -37,6 +59,25 @@ namespace powd::sand
 		rendering::GlTexture2D* powderTexture;
 		rendering::GlMeshID textureMesh;
 		rendering::GlShader* textureShader;
+
+		std::unordered_map<unsigned long long, Powder> locationMap;
+		std::vector<DirtyData> dirtyData;
+		std::set<unsigned long long> dirtyPos;
+
+		utils::DualBlockArray<PowderData> powders;
+
+
+		unsigned long long GetMapLoc(unsigned posX, unsigned posY) { return ((unsigned long long)posX << 32) | posY; }
+		unsigned long long GetMapLoc(glm::uvec2 pos) { return ((unsigned long long)pos.x << 32) | pos.y; }
+
+		void CreateDirtyData(Powder powder)
+		{
+			PowderData& powd = powders[powder];
+			dirtyData.push_back({ powd.position, powderTypes[powd.typeID].displayColor });
+			dirtyPos.insert(GetMapLoc(powd.position.x, powd.position.y));
+			if (powd.prevPosition != powd.position && dirtyPos.find(GetMapLoc(powd.position.x, powd.position.y)) != dirtyPos.end())
+				dirtyData.push_back({ powd.prevPosition, glm::uvec3(0, 0, 0) });
+		}
 
 
 #pragma region .ptype parsing
@@ -55,6 +96,12 @@ namespace powd::sand
 				case '=':
 					if (symbolBuff.size() > 0) symbols.push_back(symbolBuff);
 					symbols.push_back("=");
+					symbolBuff = "";
+					break;
+
+				case ',':
+					if (symbolBuff.size() > 0) symbols.push_back(symbolBuff);
+					symbols.push_back(",");
 					symbolBuff = "";
 					break;
 
@@ -105,6 +152,23 @@ namespace powd::sand
 					else if (leftSymbol == "Name")
 					{
 						pTypeData.displayName = rightSymbol;
+					}
+					else if (leftSymbol == "DisplayColor")
+					{
+						if (symbols.size() < i + 6)
+							throw exceptions::GenericException("Not enough values for DisplayColor on line [" + std::to_string(lineNum) + "]. 3 Unsigned Integers required.", __FILE__, __LINE__, "Parse");
+
+						unsigned colors[3];
+						try
+						{
+							colors[0] = std::stoul(symbols[i + 1]);
+							colors[1] = std::stoul(symbols[i + 3]);
+							colors[2] = std::stoul(symbols[i + 5]);
+						}
+						catch (const std::invalid_argument&) { throw exceptions::GenericException("Invalid value for a color component on line [" + std::to_string(lineNum) + "]. Unsigned Integer required.", __FILE__, __LINE__, "Parse"); }
+						catch (const std::out_of_range&) { throw exceptions::GenericException("Invalid value for a color component on line [" + std::to_string(lineNum) + "]. Unsigned Integer required.", __FILE__, __LINE__, "Parse"); }
+
+						pTypeData.displayColor = { colors[0], colors[1], colors[2] };
 					}
 					else
 					{
@@ -264,8 +328,6 @@ namespace powd::sand
 		powderTexture->SetParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		powderTexture->SetParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		powderTexture->Draw({ 0, 0 }, { 1, 3 }, { 255, 0, 0, 0, 255, 0, 0, 0, 255 });
-
 		textureEntity = ecs::entities.create();
 		auto& mat = ecs::entities.emplace<components::CompRenderMaterial>(textureEntity);
 
@@ -282,6 +344,101 @@ namespace powd::sand
 	}
 	void SandEngineShutdown()
 	{
-
+		ecs::entities.destroy(textureEntity);
+		delete textureShader;
+		delete powderTexture;
+		rendering::GlVertexCache::DeleteMesh(textureMesh);
 	}
+
+	
+#pragma region Public Powder Modification Functions
+	bool CreateNewPowder(std::string id, glm::uvec2 pos, Powder& idOut)
+	{
+		if (locationMap.find(GetMapLoc(pos.x, pos.y)) != locationMap.end())
+		{
+			Logger::Lock(Logger::WARNING) << "Attempted to create powder ontop of another powder [Location: (" << pos.x << ", " << pos.y << ") Existing ID: " << locationMap[GetMapLoc(pos.x, pos.y)] << "]" << Logger::endl;
+			return false;
+		}
+
+		PowderData data;
+		data.typeID = id;
+		data.position = pos;
+		data.prevPosition = pos;
+		
+		idOut = powders.Insert(data);
+		powders[idOut].BlockArrayIndex = idOut;
+
+		CreateDirtyData(idOut);
+		locationMap[GetMapLoc(pos)] = idOut;
+
+		return true;
+	}
+	void RemovePowder(Powder powd)
+	{
+		powders.RemoveAt(powd);
+	}
+
+	glm::uvec2 GetPowderPos(Powder powder)
+	{
+		return powders[powder].position;
+	}
+	bool SetPowderPos(glm::uvec2 newPos, Powder powder)
+	{
+		if (powders[powder].position == newPos)
+			return true;
+
+		if (locationMap.find(GetMapLoc(newPos.x, newPos.y)) != locationMap.end())
+		{
+			Logger::Lock(Logger::WARNING) << "Attempted to move powder ontop of another powder [Location: (" << newPos.x << ", " << newPos.y << ") ID To Modifiy: " << powder << " Existing ID: " << locationMap[GetMapLoc(newPos.x, newPos.y)] << "]" << Logger::endl;
+			return false;
+		}
+
+
+		powders[powder].prevPosition = powders[powder].position;
+		powders[powder].position = newPos;
+
+		CreateDirtyData(powder);
+		locationMap.erase(GetMapLoc(powders[powder].prevPosition));
+		locationMap[GetMapLoc(powders[powder].position)] = powders[powder].BlockArrayIndex;
+
+		powders.MoveToBlock1(powder);
+
+		return true;
+	}
+	bool TranslatePowderPos(glm::uvec2 translation, Powder powder)
+	{
+		return SetPowderPos(GetPowderPos(powder) + translation, powder);
+	}
+#pragma endregion
+
+
+	class PowderEngine : ecs::SystemProto
+	{
+		DEFINE_SYSTEM_PROTO(PowderEngine);
+
+	public:
+		System_Tick(dt)
+		{
+			profiling::StartSectionProfile("Falling Sands");
+
+			for (unsigned i = 0; i < powders.blockOneSize(); i++)
+			{
+				PowderData& powd = powders.data()[i];
+
+				//this is where we would implement the running of behaviours and reacting appropriately (the actual simulation)
+
+				powders.MoveToBlock2(powd.BlockArrayIndex); // this puts it to sleep. Block1 is awake, Block2 is asleep
+			}
+
+			for (DirtyData dirtyData : dirtyData)
+			{
+				powderTexture->Draw(dirtyData.pos, { 1, 1 }, { (unsigned char)dirtyData.color.r, (unsigned char)dirtyData.color.g, (unsigned char)dirtyData.color.b });
+			}
+			dirtyData.clear();
+			dirtyPos.clear();
+
+			profiling::StopSectionProfile();
+		}
+	};
+	IMPLEMENT_SYSTEM_PROTO(PowderEngine)
 }
