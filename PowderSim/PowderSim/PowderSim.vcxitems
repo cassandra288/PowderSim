@@ -22,6 +22,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\BaseException.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\GenericExceptions.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\RenderingExceptions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\Input.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputAction.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Math\CommonMath.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\DataStructures\DualBlockArray.h" />
@@ -35,12 +37,17 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlUbo.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlVertexCache.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\BehaviourFunctionExports.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\BehaviourInterface.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\Behaviours.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\SandEngine\SandEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\EntityRegistry.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\Input.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\InputAction.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Main.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.cpp" />
@@ -50,6 +57,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlUbo.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlVertexCache.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\BehaviourFunctionExports.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\BehaviourInterface.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\Behaviours.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\SandEngine\SandEngine.cpp" />
   </ItemGroup>
 </Project>

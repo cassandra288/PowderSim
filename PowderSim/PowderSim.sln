@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsConsole", "WindowsCo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LinuxConsole", "LinuxConsole\LinuxConsole.vcxproj", "{A54C9F21-C064-4979-8221-72CB262B185A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PowderSimBehaviours", "..\PowderSimBehaviours\PowderSimBehaviours.vcxproj", "{9D3B3FB1-30C6-4971-9C6F-BE7117658B29}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PowderSim\PowderSim.vcxitems*{5d184772-0db0-40ca-8f76-048fb73029d2}*SharedItemsImports = 9
@@ -41,6 +43,14 @@ Global
 		{A54C9F21-C064-4979-8221-72CB262B185A}.Release|x86.ActiveCfg = Release|x86
 		{A54C9F21-C064-4979-8221-72CB262B185A}.Release|x86.Build.0 = Release|x86
 		{A54C9F21-C064-4979-8221-72CB262B185A}.Release|x86.Deploy.0 = Release|x86
+		{9D3B3FB1-30C6-4971-9C6F-BE7117658B29}.Debug|x64.ActiveCfg = Debug|x64
+		{9D3B3FB1-30C6-4971-9C6F-BE7117658B29}.Debug|x64.Build.0 = Debug|x64
+		{9D3B3FB1-30C6-4971-9C6F-BE7117658B29}.Debug|x86.ActiveCfg = Debug|Win32
+		{9D3B3FB1-30C6-4971-9C6F-BE7117658B29}.Debug|x86.Build.0 = Debug|Win32
+		{9D3B3FB1-30C6-4971-9C6F-BE7117658B29}.Release|x64.ActiveCfg = Release|x64
+		{9D3B3FB1-30C6-4971-9C6F-BE7117658B29}.Release|x64.Build.0 = Release|x64
+		{9D3B3FB1-30C6-4971-9C6F-BE7117658B29}.Release|x86.ActiveCfg = Release|Win32
+		{9D3B3FB1-30C6-4971-9C6F-BE7117658B29}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

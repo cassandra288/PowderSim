@@ -97,6 +97,7 @@ namespace powd::dispatch
 						ecs::system::RunSystems_PostTick(1.f / tickFrequency);
 
 						timepoints.tick += std::chrono::nanoseconds(1000000000 / tickFrequency);
+						break;
 					}
 					profiling::StopSectionProfile();
 				}

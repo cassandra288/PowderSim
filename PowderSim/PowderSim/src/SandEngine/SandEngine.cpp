@@ -21,6 +21,8 @@
 #include "src/Rendering/Wrappers/GlTexture.h"
 #include "src/Core/Profiling/CPUProfiler.h"
 
+#include "Behaviours/Behaviours.h"
+
 USING_LOGGER;
 
 
@@ -32,6 +34,8 @@ namespace powd::sand
 		std::string id = "";
 		std::string displayName = "";
 		glm::uvec3 displayColor = { 255, 255, 255 };
+
+		std::vector<std::string> behaviours;
 	};
 
 	struct DirtyData
@@ -49,10 +53,19 @@ namespace powd::sand
 
 		Powder BlockArrayIndex;
 		glm::uvec2 prevPosition = { 0, 0 };
+
+		bool operator ==(const PowderData& _o)
+		{ // we dont include any instance-unique data here
+			return (
+				position == _o.position &&
+				typeID == _o.typeID
+			);
+		}
 	};
 
 	namespace
 	{
+		const unsigned sizeX = 128, sizeY = 72;
 		std::unordered_map<std::string, PowderTypeData> powderTypes;
 
 		entt::entity textureEntity;
@@ -65,6 +78,7 @@ namespace powd::sand
 		std::set<unsigned long long> dirtyPos;
 
 		utils::DualBlockArray<PowderData> powders;
+		bool powderChanged = false;
 
 
 		unsigned long long GetMapLoc(unsigned posX, unsigned posY) { return ((unsigned long long)posX << 32) | posY; }
@@ -87,6 +101,7 @@ namespace powd::sand
 			std::string symbolBuff;
 			bool inQuotes = false;
 			bool escaping = false;
+			unsigned dashDepth = 0;
 
 			for (unsigned i = 0; i < line.size(); i++)
 			{
@@ -111,6 +126,7 @@ namespace powd::sand
 					{
 						inQuotes = !inQuotes;
 						if (symbolBuff.size() > 0) symbols.push_back(symbolBuff);
+						symbolBuff = "";
 					}
 					else
 						symbolBuff += line[i];
@@ -123,6 +139,13 @@ namespace powd::sand
 						escaping = true;
 					break;
 
+				case '-':
+					if (dashDepth < lineDepth)
+						dashDepth++;
+					else
+						symbolBuff += line[i];
+					break;
+
 				default:
 					symbolBuff += line[i];
 					break;
@@ -133,48 +156,47 @@ namespace powd::sand
 			}
 			if (symbolBuff.size() > 0) symbols.push_back(symbolBuff);
 
-			for (unsigned i = 0; i < symbols.size(); i++)
+			if (symbols.size() > 1 && symbols[1] == "=")
 			{
-				if (symbols[i] == "=")
+				if (symbols.size() == 2)
+					throw exceptions::GenericException("Missing right hand of = on line [" + std::to_string(lineNum) + "].", __FILE__, __LINE__, "Parse");
+
+				std::string leftSymbol = symbols[0];
+				std::string rightSymbol = symbols[2];
+
+				if (leftSymbol == "ID")
 				{
-					if (i == 0)
-						throw exceptions::GenericException("Missing left hand of = on line [" + std::to_string(lineNum) + "].", __FILE__, __LINE__, "Parse");
-					else if (i == symbols.size() - 1)
-						throw exceptions::GenericException("Missing right hand of = on line [" + std::to_string(lineNum) + "].", __FILE__, __LINE__, "Parse");
-
-					std::string leftSymbol = symbols[i - 1];
-					std::string rightSymbol = symbols[i + 1];
-
-					if (leftSymbol == "ID")
-					{
-						pTypeData.id = rightSymbol;
-					}
-					else if (leftSymbol == "Name")
-					{
-						pTypeData.displayName = rightSymbol;
-					}
-					else if (leftSymbol == "DisplayColor")
-					{
-						if (symbols.size() < i + 6)
-							throw exceptions::GenericException("Not enough values for DisplayColor on line [" + std::to_string(lineNum) + "]. 3 Unsigned Integers required.", __FILE__, __LINE__, "Parse");
-
-						unsigned colors[3];
-						try
-						{
-							colors[0] = std::stoul(symbols[i + 1]);
-							colors[1] = std::stoul(symbols[i + 3]);
-							colors[2] = std::stoul(symbols[i + 5]);
-						}
-						catch (const std::invalid_argument&) { throw exceptions::GenericException("Invalid value for a color component on line [" + std::to_string(lineNum) + "]. Unsigned Integer required.", __FILE__, __LINE__, "Parse"); }
-						catch (const std::out_of_range&) { throw exceptions::GenericException("Invalid value for a color component on line [" + std::to_string(lineNum) + "]. Unsigned Integer required.", __FILE__, __LINE__, "Parse"); }
-
-						pTypeData.displayColor = { colors[0], colors[1], colors[2] };
-					}
-					else
-					{
-						throw exceptions::GenericException("Invalid value: \"" + leftSymbol + "\".", __FILE__, __LINE__, "Parse");
-					}
+					pTypeData.id = rightSymbol;
 				}
+				else if (leftSymbol == "Name")
+				{
+					pTypeData.displayName = rightSymbol;
+				}
+				else if (leftSymbol == "DisplayColor")
+				{
+					if (symbols.size() < 7)
+						throw exceptions::GenericException("Not enough values for DisplayColor on line [" + std::to_string(lineNum) + "]. 3 Unsigned Integers required.", __FILE__, __LINE__, "Parse");
+
+					unsigned colors[3];
+					try
+					{
+						colors[0] = std::stoul(symbols[2]);
+						colors[1] = std::stoul(symbols[4]);
+						colors[2] = std::stoul(symbols[6]);
+					}
+					catch (const std::invalid_argument&) { throw exceptions::GenericException("Invalid value for a color component on line [" + std::to_string(lineNum) + "]. Unsigned Integer required.", __FILE__, __LINE__, "Parse"); }
+					catch (const std::out_of_range&) { throw exceptions::GenericException("Invalid value for a color component on line [" + std::to_string(lineNum) + "]. Unsigned Integer required.", __FILE__, __LINE__, "Parse"); }
+
+					pTypeData.displayColor = { colors[0], colors[1], colors[2] };
+				}
+				else
+				{
+					throw exceptions::GenericException("Invalid value: \"" + leftSymbol + "\".", __FILE__, __LINE__, "Parse");
+				}
+			}
+			else if (scope.size() > 0 && scope[0] == "Behaviours")
+			{
+				pTypeData.behaviours.push_back(symbols[0]);
 			}
 		}
 
@@ -209,6 +231,12 @@ namespace powd::sand
 							currLine += chr;
 						else
 						{
+							if (!lineDepthParsed)
+							{
+								if (lineDepth < scope.size())
+									scope.resize(lineDepth);
+							}
+
 							ParseLine(scope, currLine, lineDepth, lineNumber++, file, pTypeData);
 							currLine = "";
 							lineDepth = 0;
@@ -221,6 +249,12 @@ namespace powd::sand
 							currLine += chr;
 						else
 						{
+							if (!lineDepthParsed)
+							{
+								if (lineDepth < scope.size())
+									scope.resize(lineDepth);
+							}
+
 							scope.push_back(currLine);
 							currLine = "";
 							lineDepth = 0;
@@ -262,15 +296,7 @@ namespace powd::sand
 
 					if (wasEscaping)
 						escaping = false; // if we started this char escaping, we need to stop escaping afterwards
-
-					if (chr != '-' && !lineDepthParsed)
-					{
-						if (lineDepth < scope.size())
-							scope.resize(lineDepth); // TODO: Parse scope correctly
-					}
 				}
-
-				if (currLine.size() > 0) ParseLine(scope, currLine, lineDepth, lineNumber, file, pTypeData);
 			}
 			catch (const exceptions::GenericException& e)
 			{
@@ -289,11 +315,13 @@ namespace powd::sand
 
 	void SandEngineSetup()
 	{
+		LoadBehaviours();
+
 #pragma region powder type loading
 		{
 			namespace fs = std::filesystem;
 
-			for (const auto& file : fs::directory_iterator("TypeData"))
+			for (const auto& file : fs::recursive_directory_iterator("TypeData"))
 			{
 				if (file.is_regular_file() && file.path().extension() == ".ptype")
 				{
@@ -324,7 +352,7 @@ namespace powd::sand
 		textureShader->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
 		textureShader->BuildVAO();
 
-		powderTexture = new rendering::GlTexture2D(0, rendering::GlTextureFormat::RGB, 128, 72, false);
+		powderTexture = new rendering::GlTexture2D(0, rendering::GlTextureFormat::RGB, sizeX, sizeY, false);
 		powderTexture->SetParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		powderTexture->SetParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -348,6 +376,8 @@ namespace powd::sand
 		delete textureShader;
 		delete powderTexture;
 		rendering::GlVertexCache::DeleteMesh(textureMesh);
+
+		UnloadBehaviours();
 	}
 
 	
@@ -375,7 +405,22 @@ namespace powd::sand
 	}
 	void RemovePowder(Powder powd)
 	{
+		dirtyData.push_back({ powders[powd].position, glm::uvec3(0, 0, 0) });
+		locationMap.erase(GetMapLoc(powders[powd].prevPosition));
+
 		powders.RemoveAt(powd);
+	}
+
+	Powder GetPowder(glm::uvec2 pos)
+	{
+		const auto& findr = locationMap.find(GetMapLoc(pos));
+		if (findr == locationMap.end())
+			return powders.reservedVal;
+		return (*findr).second;
+	}
+	std::string GetPowderType(Powder powder)
+	{
+		return powders[powder].typeID;
 	}
 
 	glm::uvec2 GetPowderPos(Powder powder)
@@ -401,7 +446,8 @@ namespace powd::sand
 		locationMap.erase(GetMapLoc(powders[powder].prevPosition));
 		locationMap[GetMapLoc(powders[powder].position)] = powders[powder].BlockArrayIndex;
 
-		powders.MoveToBlock1(powder);
+		if (powders.inBlockTwo(powder))
+			powders.MoveToBlock1(powder); // wake it up
 
 		return true;
 	}
@@ -421,14 +467,50 @@ namespace powd::sand
 		{
 			profiling::StartSectionProfile("Falling Sands");
 
-			for (unsigned i = 0; i < powders.blockOneSize(); i++)
+			/*for (unsigned i = 0; i < powders.blockOneSize(); i++)
 			{
 				PowderData& powd = powders.data()[i];
+				PowderData oldPowd = PowderData(powd);
 
-				//this is where we would implement the running of behaviours and reacting appropriately (the actual simulation)
+				PowderTypeData& type = powderTypes[powd.typeID];
+				for (std::string behaviour : type.behaviours)
+				{
+					RunBehaviour(powd.BlockArrayIndex, behaviour);
+				}
 
-				powders.MoveToBlock2(powd.BlockArrayIndex); // this puts it to sleep. Block1 is awake, Block2 is asleep
+				if (powd == oldPowd)
+					powders.MoveToBlock2(powd.BlockArrayIndex); // this puts it to sleep. Block1 is awake, Block2 is asleep
+			}*/ // TODO: Figure out how to not loop chunks and instead just loop existing powders
+			RunBuiltinBehaviour("PreTick");
+			std::unordered_set<Powder> updatedPowds;
+			for (unsigned y = 1; y < sizeY - 1; y++)
+			{
+				for (unsigned x = 1; x < sizeX - 1; x++)
+				{
+					unsigned long long mapLoc = GetMapLoc({ x, y });
+					
+					const auto& mapPos = locationMap.find(mapLoc);
+					if (mapPos != locationMap.end() && powders.inBlockOne((*mapPos).second) && updatedPowds.find((*mapPos).second) == updatedPowds.end())
+					{
+						PowderData& powd = powders[(*mapPos).second];
+						PowderData oldPowd = PowderData(powd);
+
+						PowderTypeData& type = powderTypes[powd.typeID];
+						bool sleepSkip = false;
+						for (std::string behaviour : type.behaviours)
+						{
+							bool tmp = RunBehaviour(powd.BlockArrayIndex, behaviour);
+							if (tmp)
+								sleepSkip = true;
+						}
+
+						updatedPowds.insert(powd.BlockArrayIndex);
+						if (powd == oldPowd && !sleepSkip)
+							powders.MoveToBlock2(powd.BlockArrayIndex); // this puts it to sleep. Block1 is awake, Block2 is asleep
+					}
+				}
 			}
+			RunBuiltinBehaviour("PostTick");
 
 			for (DirtyData dirtyData : dirtyData)
 			{

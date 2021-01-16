@@ -36,7 +36,16 @@ namespace powd
 
 		sand::SandEngineSetup();
 
-		sand::CreateNewPowder("Test", { 5, 5 }, powd);
+		sand::CreateNewPowder("core:test", { 5, 5 }, powd);
+		sand::CreateNewPowder("core:test", { 6, 5 }, powd);
+		sand::CreateNewPowder("core:test", { 7, 5 }, powd);
+
+
+		sand::CreateNewPowder("core:test", { 1, 69 }, powd);
+		sand::CreateNewPowder("core:test", { 2, 69 }, powd);
+		sand::CreateNewPowder("core:test", { 3, 69 }, powd);
+		sand::CreateNewPowder("core:test", { 3, 70 }, powd);
+		sand::CreateNewPowder("core:test", { 2, 71 }, powd);
 	}
 
 	class TestSystem : ecs::SystemProto
@@ -54,7 +63,7 @@ namespace powd
 
 			if (tmp == 0)
 			{
-				sand::TranslatePowderPos({ 1, 0 }, powd);
+				//sand::TranslatePowderPos({ 1, 0 }, powd);
 			}
 		}
 	};

@@ -11,6 +11,9 @@ namespace powd::utils
 	template<typename T>
 	class DualBlockArray
 	{
+	public:
+#undef max
+		static constexpr unsigned reservedVal = std::numeric_limits<unsigned>::max();
 	private:
 		std::mutex mut;
 		unsigned arrBlockOneSize = 0;
@@ -34,10 +37,6 @@ namespace powd::utils
 			{
 				mapIndex = *indexToDataGaps.begin();
 				indexToDataGaps.erase(mapIndex);
-			}
-			if (false)
-			{
-
 			}
 			else
 			{
@@ -150,13 +149,22 @@ namespace powd::utils
 			std::lock_guard<std::mutex> lk(mut);
 			return dataVec.empty();
 		}
+		bool inBlockOne(unsigned _i)
+		{
+			std::lock_guard<std::mutex> lk(mut);
+			return _i < arrBlockOneSize;
+		}
+		bool inBlockTwo(unsigned _i)
+		{
+			std::lock_guard<std::mutex> lk(mut);
+			return _i >= arrBlockOneSize;
+		}
 #pragma endregion
 #pragma region Modifiers
 		private:
 			void InternalResize(unsigned _size)
 			{
-#undef max
-				assert(_size < std::numeric_limits<unsigned>::max());
+				assert(_size < reservedVal);
 				dataVec.resize(_size);
 
 				unsigned _oldSize = dataToIndex.size();
@@ -194,6 +202,7 @@ namespace powd::utils
 				if (_i < arrBlockOneSize)
 				{
 					SwapData(_i, --arrBlockOneSize); // move it to the edge of block one
+					_i = arrBlockOneSize;
 				}
 
 				if (_i < dataVec.size() - 1)

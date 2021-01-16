@@ -37,6 +37,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\SandEngine\SandEngine.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\DataStructures\DualBlockArray.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\BehaviourFunctionExports.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\Behaviours.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\BehaviourInterface.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\Input.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputAction.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />
@@ -52,5 +57,10 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\SandEngine\SandEngine.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\Behaviours.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\BehaviourInterface.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\SandEngine\Behaviours\BehaviourFunctionExports.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\Input.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\InputAction.cpp" />
   </ItemGroup>
 </Project>
