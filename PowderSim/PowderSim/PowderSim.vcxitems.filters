@@ -35,6 +35,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Components\CompTransform2D.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\Input.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputAction.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDrivers.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDevice.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputProcessor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />
@@ -49,5 +54,10 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\EntityRegistry.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\Input.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\InputAction.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDrivers.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDevice.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Utils\StringUtils.cpp" />
   </ItemGroup>
 </Project>

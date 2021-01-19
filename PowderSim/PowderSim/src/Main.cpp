@@ -20,12 +20,22 @@
 
 #include "src/Core/Profiling/CPUProfiler.h"
 
+#include "src/Core/Input/InputDrivers.h"
+#include "src/Core/Input/InputAction.h"
+#include "src/Core/Input/Input.h"
+
 USING_LOGGER
 
 
 namespace powd
 {	
-	rendering::GlTexture2D* texture;
+	input::InputAction* action;
+
+	class TmpProcessor : input::InputProcessor
+	{
+	public:
+		bool ProcessBool(bool val) { return !val; }
+	};
 
 	void OnStart()
 	{
@@ -37,46 +47,13 @@ namespace powd
 		
 		rendering::StartRenderer();
 
-
-		using namespace rendering;
 		{
-			static const float meshData[24] = {
-				-0.5f, -0.5f, 0.f, 0.f,
-				0.5f, -0.5f, 1.f, 0.f,
-				-0.5f, 0.5f, 0.f, 1.f,
-				-0.5f, 0.5f, 0.f, 1.f,
-				0.5f, -0.5f, 1.f, 0.f,
-				0.5f, 0.5f, 1.f, 1.f
-			};
-			GlMeshID mesh = GlVertexCache::CreateMesh((void*)meshData, 24 * sizeof(float), {}, 0);
-			GlShader* shader = new GlShader("powder_texture.vert", "powder_texture.frag");
-			shader->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
-			shader->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
-			shader->BuildVAO();
+			using namespace input;
 
-			texture = new GlTexture2D(0, GlTextureFormat::RGB, 128, 72, false);
-			texture->SetParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			texture->SetParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			texture->Bind();
+			AddDevice<InputDevice_Keyboard, std::string>("keyboard", "Keyboard");
 
-			texture->Draw({ 0, 0 }, { 1, 3 }, { 255, 0, 0, 0, 255, 0, 0, 0, 255 });
-
-			unsigned char data[3];
-			texture->Read({ 0, 1 }, { 1, 1 }, data);
-			Logger::Lock() << (int)data[0] << ", " << (int)data[1] << ", " << (int)data[2] << Logger::endl;
-
-			auto entity = ecs::entities.create();
-			auto& mat = ecs::entities.emplace<components::CompRenderMaterial>(entity);
-
-			mat.mesh = mesh;
-			mat.shader = shader;
-			mat.textures.push_back(texture);
-
-			auto& trans = ecs::entities.emplace<components::CompTransform2D>(entity);
-
-			trans.position = { 0, 0 };
-			trans.rotation = 0;
-			trans.scale = { 1280, 720 };
+			action = new InputAction("keyboard/F;keyboard/G;keyboard/H;keyboard/J");
+			action->AddProcessor<TmpProcessor>();
 		}
 	}
 
@@ -91,20 +68,15 @@ namespace powd
 	public:
 		System_Tick(dt)
 		{
-			/*for (entt::entity entity : ecs::entities.view<components::CompTransform2D>())
-			{
-				auto& transform = ecs::entities.get<components::CompTransform2D>(entity);
-
-				transform.position.x = transform.startX + (sin(transform.test) * scale);
-				transform.test += speed * dt;
-			}*/
-
-			//Logger::Log(profiling::GetProfileDataStr());
+			//Logger::Log(std::to_string(action->GetData<bool>()));
+			Logger::Log(profiling::GetProfileDataStr());
 		}
 	};
 
 	void OnStop()
 	{
+		input::RemoveDevice("keyboard");
+
 		rendering::StopRenderer();
 
 		window::StopSDL();
@@ -118,8 +90,6 @@ namespace powd
 		{
 			OnStart();
 
-			auto mat = ecs::entities.get<components::CompRenderMaterial>(entt::entity(0));
-
 			dispatch::CoreLoop();
 
 			OnStop();
@@ -127,7 +97,7 @@ namespace powd
 		catch (const powd::exceptions::BaseException& e)
 		{
 			std::string msg = utils::string::ReplaceAll(e.Message(), "\n", "\n    ");
-			Logger::Lock() << "Unhandled " << e.ExceptionType() << " Exception at: " << e.File() << "[" << e.Line() << "]\n    "
+			Logger::Lock(Logger::ERROR) << "Unhandled " << e.ExceptionType() << " Exception at: " << e.File() << "[" << e.Line() << "]\n    "
 				<< "Message: " << msg << Logger::endl;
 		}
 

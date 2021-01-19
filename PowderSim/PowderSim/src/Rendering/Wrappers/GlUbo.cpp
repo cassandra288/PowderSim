@@ -109,7 +109,7 @@ namespace powd::rendering
 		UboData* data = new UboData();
 
 		data->index = uboData->size();
-		data->typeMask = StructEnd;
+		data->typeMask = (char)StructEnd;
 
 		data->dataOffset = 0;
 		if (uboData->size() > 0)
