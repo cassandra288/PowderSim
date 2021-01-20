@@ -82,7 +82,9 @@ namespace powd::dispatch
 
 				currentTime = std::chrono::steady_clock::now();
 
+				profiling::StartSectionProfile("Window Event Flushing");
 				window::FlushEvents();
+				profiling::StopSectionProfile();
 
 				if (!running)
 					break;

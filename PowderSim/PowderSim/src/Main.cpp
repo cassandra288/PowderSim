@@ -13,10 +13,17 @@
 #include "src/SandEngine/SandEngine.h"
 #include "src/Core/Exceptions/BaseException.h"
 
-#include "src/Core/Utils/StringUtils.h"
+#include "src/Core/Ecs/EntityRegistry.h"
+#include "src/Core/Components/CompRenderMaterial.h"
+#include "src/Core/Components/CompTransform2D.h"
 
+#include "src/Core/Utils/StringUtils.h"
 #include "src/Core/Ecs/SystemProto.h"
 #include "src/Core/Profiling/CPUProfiler.h"
+
+#include "src/Core/Input/InputDrivers.h"
+#include "src/Core/Input/InputAction.h"
+#include "src/Core/Input/Input.h"
 
 USING_LOGGER
 
@@ -33,6 +40,9 @@ namespace powd
 		window::mainWindow = window::StartWindow("Powder Sim", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN, dispatch::StopCoreLoop);
 		
 		rendering::StartRenderer();
+
+		input::AddDevice<input::InputDevice_Keyboard, std::string>("keyboard", "Keyboard");
+		input::AddDevice<input::InputDevice_Mouse, std::string>("mouse", "Mouse");
 
 		sand::SandEngineSetup();
 
@@ -65,12 +75,16 @@ namespace powd
 			{
 				//sand::TranslatePowderPos({ 1, 0 }, powd);
 			}
+			//Logger::Log(profiling::GetProfileDataStr());
 		}
 	};
 
 	void OnStop()
 	{
 		sand::SandEngineShutdown();
+
+		input::ClearActions();
+		input::ClearDevices();
 
 		rendering::StopRenderer();
 
@@ -92,8 +106,8 @@ namespace powd
 		catch (const powd::exceptions::BaseException& e)
 		{
 			std::string msg = utils::string::ReplaceAll(e.Message(), "\n", "\n    ");
-			Logger::Lock(Logger::ERROR) << "Unhandled " << e.ExceptionType() << " Exception at: " << e.File() << "[" << e.Line() << "]\n"
-				<< "Message:\n    " << msg << Logger::endl;
+			Logger::Lock(Logger::ERROR) << "Unhandled " << e.ExceptionType() << " Exception at: " << e.File() << "[" << e.Line() << "]\n    "
+				<< "Message: " << msg << Logger::endl;
 		}
 
 		return 0;
