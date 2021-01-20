@@ -345,7 +345,7 @@ namespace powd::sand
 				0.5f, -0.5f, 1.f, 0.f,
 				0.5f, 0.5f, 1.f, 1.f
 		};
-		textureMesh = rendering::GlVertexCache::CreateMesh((void*)meshData, 24 * sizeof(float), {}, 0);
+		textureMesh = rendering::GlVertexCache::CreateMesh((void*)meshData, 24 * sizeof(float));
 
 		textureShader = new rendering::GlShader("Shaders/powder_texture.vert", "Shaders/powder_texture.frag");
 		textureShader->AddAttribute({ 2, GL_FLOAT, sizeof(float) });
@@ -401,13 +401,10 @@ namespace powd::sand
 		CreateDirtyData(idOut);
 		locationMap[GetMapLoc(pos)] = idOut;
 
-		Logger::Lock() << "Created powder: " << idOut << Logger::endl;
-
 		return true;
 	}
 	void RemovePowder(Powder powd)
 	{
-		Logger::Lock() << "Deleted powder: " << powd << Logger::endl;
 		if (!powders.contains(powd))
 			return;
 		dirtyData.push_back({ powders[powd].position, glm::uvec3(0, 0, 0) });
