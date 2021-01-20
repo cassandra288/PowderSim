@@ -104,6 +104,8 @@ namespace powd::window
 
 		SDL_PumpEvents();
 
+		input::intern::InputProcessor::PreUpdate();
+
 		SDL_Event e;
 		int currentEvents = 0;
 		const int maxEvents = 50;
@@ -164,6 +166,7 @@ namespace powd::window
 				}
 			}
 		}
+		input::intern::InputProcessor::PostUpdate();
 
 		return SDL_PeepEvents(nullptr, UINT32_MAX, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
 	}

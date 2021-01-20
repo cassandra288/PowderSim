@@ -86,4 +86,13 @@ namespace powd::input
 		else
 			SetValue_Internal(&val);
 	}
+
+
+	void InputDriverVec2::SetValue_Internal(void* val)
+	{
+		myval = *(glm::vec2*)val;
+		eventSignal.publish(this);
+		children["x"]->SetValue<float>(1.f);
+		children["y"]->SetValue<float>(1.f);
+	}
 }

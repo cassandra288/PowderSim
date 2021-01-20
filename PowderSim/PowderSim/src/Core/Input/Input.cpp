@@ -8,6 +8,7 @@
 namespace powd::input
 {
 	std::unordered_map<std::string, InputDevice*> intern::devices;
+	std::unordered_map<std::string, InputAction*> inputActions;
 
 
 	InputDevice* GetDevice(std::string name)
@@ -37,23 +38,50 @@ namespace powd::input
 	{
 		RemoveDevice(name + ":" + std::to_string(index));
 	}
+	void ClearDevices()
+	{
+		for (auto pair : intern::devices)
+			delete pair.second;
+		intern::devices.clear();
+	}
 
 
 
 	template<> bool GetInput(std::string inputName)
 	{
-		return true;
+		return inputActions[inputName]->GetData<bool>();
 	}
 	template<> int GetInput(std::string inputName)
 	{
-		return 0;
+		return inputActions[inputName]->GetData<int>();
 	}
 	template<> float GetInput(std::string inputName)
 	{
-		return 0;
+		return inputActions[inputName]->GetData<float>();
 	}
 	template<> glm::vec2 GetInput(std::string inputName)
 	{
-		return { 0, 0 };
+		return inputActions[inputName]->GetData<glm::vec2>();
+	}
+
+
+	void CreateAction(std::string name, std::string binding)
+	{
+		inputActions[name] = new InputAction(binding);
+	}
+	void DeleteAction(std::string name)
+	{
+		delete inputActions[name];
+		inputActions.erase(name);
+	}
+	InputAction* GetAction(std::string name)
+	{
+		return inputActions[name];
+	}
+	void ClearActions()
+	{
+		for (auto pair : inputActions)
+			delete pair.second;
+		inputActions.clear();
 	}
 }

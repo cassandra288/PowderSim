@@ -50,6 +50,8 @@ namespace powd::input
 	private:
 		void AttachInput(std::string name, InputDriver* driver) { inputs[name] = driver; }
 		virtual void UpdateInput(SDL_Event& e) {};
+		virtual void PreUpdate() {};
+		virtual void PostUpdate() {};
 
 		friend InputDriver;
 		friend intern::InputProcessor;
@@ -65,6 +67,20 @@ namespace powd::input
 				for (auto& device : InputDevice::devices)
 				{
 					device->UpdateInput(e);
+				}
+			}
+			static void PreUpdate()
+			{
+				for (auto& device : InputDevice::devices)
+				{
+					device->PreUpdate();
+				}
+			}
+			static void PostUpdate()
+			{
+				for (auto& device : InputDevice::devices)
+				{
+					device->PostUpdate();
 				}
 			}
 		};
@@ -83,6 +99,7 @@ namespace powd::input
 	public:
 		InputDevice_Mouse(std::string _name);
 	private:
+		void PreUpdate();
 		void UpdateInput(SDL_Event& e);
 	};
 }

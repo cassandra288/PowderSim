@@ -29,14 +29,6 @@ USING_LOGGER
 
 namespace powd
 {	
-	input::InputAction* action;
-
-	class TmpProcessor : input::InputProcessor
-	{
-	public:
-		bool ProcessBool(bool val) { return !val; }
-	};
-
 	void OnStart()
 	{
 		new cpplog::Logger("log.txt", "Main", 4);
@@ -47,14 +39,8 @@ namespace powd
 		
 		rendering::StartRenderer();
 
-		{
-			using namespace input;
-
-			AddDevice<InputDevice_Keyboard, std::string>("keyboard", "Keyboard");
-
-			action = new InputAction("keyboard/F;keyboard/G;keyboard/H;keyboard/J");
-			action->AddProcessor<TmpProcessor>();
-		}
+		input::AddDevice<input::InputDevice_Keyboard, std::string>("keyboard", "Keyboard");
+		input::AddDevice<input::InputDevice_Mouse, std::string>("mouse", "Mouse");
 	}
 
 	class TestSystem : ecs::SystemProto
@@ -62,20 +48,19 @@ namespace powd
 		DEFINE_SYSTEM_PROTO(TestSystem);
 
 	private:
-		const float scale = 1;
-		const float speed = 180.f;
+		bool prevToggleVal;
 
 	public:
 		System_Tick(dt)
 		{
-			//Logger::Log(std::to_string(action->GetData<bool>()));
-			Logger::Log(profiling::GetProfileDataStr());
+			//Logger::Log(profiling::GetProfileDataStr());
 		}
 	};
 
 	void OnStop()
 	{
-		input::RemoveDevice("keyboard");
+		input::ClearActions();
+		input::ClearDevices();
 
 		rendering::StopRenderer();
 

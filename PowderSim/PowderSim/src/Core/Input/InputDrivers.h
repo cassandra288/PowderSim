@@ -17,12 +17,11 @@ namespace powd::input
 
 	class InputDriver
 	{
-	private:
+	protected:
 		std::string name;
 		InputDevice* device;
 		InputDriver* parent;
 		std::unordered_map<std::string, InputDriver*> children;
-	protected:
 		entt::sigh<void(InputDriver*)> eventSignal;
 
 	public:
@@ -122,11 +121,15 @@ namespace powd::input
 	{
 	public:
 		glm::vec2 myval;
-		InputDriverVec2(std::string _name, glm::vec2 _val, InputDevice* _device, InputDriver* _parent = nullptr) : myval(_val), InputDriver(_name, _device, _parent) {}
+		InputDriverVec2(std::string _name, glm::vec2 _val, InputDevice* _device, InputDriver* _parent = nullptr) : myval(_val), InputDriver(_name, _device, _parent)
+		{
+			new InputDriverFloat("x", 0, _device, this);
+			new InputDriverFloat("y", 0, _device, this);
+		}
 
 	private:
 		void* ReadValue_Internal() { return &myval; };
-		void SetValue_Internal(void* val) { myval = *(glm::vec2*)val; eventSignal.publish(this); };
+		void SetValue_Internal(void* val);
 		Type GetType() { return Type::_vec2; }
 	};
 }

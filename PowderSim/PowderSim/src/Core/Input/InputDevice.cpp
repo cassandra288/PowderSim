@@ -130,23 +130,23 @@ namespace powd::input
 		new InputDriverBool("Right", false, this);
 
 		new InputDriverBool("Numlock", false, this);
-		new InputDriverBool("Keypad /", false, this);
-		new InputDriverBool("Keypad *", false, this);
-		new InputDriverBool("Keypad -", false, this);
-		new InputDriverBool("Keypad +", false, this);
-		new InputDriverBool("Keypad Return", false, this);
-		new InputDriverBool("Keypad .", false, this);
+		new InputDriverBool("Numpad /", false, this);
+		new InputDriverBool("Numpad *", false, this);
+		new InputDriverBool("Numpad -", false, this);
+		new InputDriverBool("Numpad +", false, this);
+		new InputDriverBool("Numpad Return", false, this);
+		new InputDriverBool("Numpad .", false, this);
 
-		new InputDriverBool("Keypad 0", false, this);
-		new InputDriverBool("Keypad 1", false, this);
-		new InputDriverBool("Keypad 2", false, this);
-		new InputDriverBool("Keypad 3", false, this);
-		new InputDriverBool("Keypad 4", false, this);
-		new InputDriverBool("Keypad 5", false, this);
-		new InputDriverBool("Keypad 6", false, this);
-		new InputDriverBool("Keypad 7", false, this);
-		new InputDriverBool("Keypad 8", false, this);
-		new InputDriverBool("Keypad 9", false, this);
+		new InputDriverBool("Numpad 0", false, this);
+		new InputDriverBool("Numpad 1", false, this);
+		new InputDriverBool("Numpad 2", false, this);
+		new InputDriverBool("Numpad 3", false, this);
+		new InputDriverBool("Numpad 4", false, this);
+		new InputDriverBool("Numpad 5", false, this);
+		new InputDriverBool("Numpad 6", false, this);
+		new InputDriverBool("Numpad 7", false, this);
+		new InputDriverBool("Numpad 8", false, this);
+		new InputDriverBool("Numpad 9", false, this);
 	}
 	void InputDevice_Keyboard::UpdateInput(SDL_Event& e)
 	{
@@ -435,53 +435,53 @@ namespace powd::input
 				inputs["Numlock"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_DIVIDE:
-				inputs["Keypad /"]->SetValue<bool>(e.key.state);
+				inputs["Numpad /"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_MULTIPLY:
-				inputs["Keypad *"]->SetValue<bool>(e.key.state);
+				inputs["Numpad *"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_MINUS:
-				inputs["Keypad -"]->SetValue<bool>(e.key.state);
+				inputs["Numpad -"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_PLUS:
-				inputs["Keypad +"]->SetValue<bool>(e.key.state);
+				inputs["Numpad +"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_ENTER:
-				inputs["Keypad Return"]->SetValue<bool>(e.key.state);
+				inputs["Numpad Return"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_PERIOD:
-				inputs["Keypad ."]->SetValue<bool>(e.key.state);
+				inputs["Numpad ."]->SetValue<bool>(e.key.state);
 				break;
 
 			case SDLK_KP_0:
-				inputs["Keypad 0"]->SetValue<bool>(e.key.state);
+				inputs["Numpad 0"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_1:
-				inputs["Keypad 1"]->SetValue<bool>(e.key.state);
+				inputs["Numpad 1"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_2:
-				inputs["Keypad 2"]->SetValue<bool>(e.key.state);
+				inputs["Numpad 2"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_3:
-				inputs["Keypad 3"]->SetValue<bool>(e.key.state);
+				inputs["Numpad 3"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_4:
-				inputs["Keypad 4"]->SetValue<bool>(e.key.state);
+				inputs["Numpad 4"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_5:
-				inputs["Keypad 5"]->SetValue<bool>(e.key.state);
+				inputs["Numpad 5"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_6:
-				inputs["Keypad 6"]->SetValue<bool>(e.key.state);
+				inputs["Numpad 6"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_7:
-				inputs["Keypad 7"]->SetValue<bool>(e.key.state);
+				inputs["Numpad 7"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_8:
-				inputs["Keypad 8"]->SetValue<bool>(e.key.state);
+				inputs["Numpad 8"]->SetValue<bool>(e.key.state);
 				break;
 			case SDLK_KP_9:
-				inputs["Keypad 9"]->SetValue<bool>(e.key.state);
+				inputs["Numpad 9"]->SetValue<bool>(e.key.state);
 				break;
 
 			default:
@@ -493,17 +493,50 @@ namespace powd::input
 
 	InputDevice_Mouse::InputDevice_Mouse(std::string _name) : InputDevice(_name)
 	{
-		//TODO: Add Mouse Drivers
+		new InputDriverBool("LButton", false, this);
+		new InputDriverBool("RButton", false, this);
+		new InputDriverBool("MButton", false, this);
+
+		new InputDriverVec2("Position", { 0, 0 }, this);
+		new InputDriverVec2("Delta", { 0, 0 }, this);
+
+		new InputDriverVec2("Scroll", { 0, 0, }, this);
+		//TODO: Maybe add consecutive click counter?
 	}
 	void InputDevice_Mouse::UpdateInput(SDL_Event& e)
 	{
 		switch (e.type)
 		{
 		case SDL_MOUSEMOTION:
+			inputs["Position"]->SetValue<glm::vec2>({ e.motion.x, e.motion.y });
+			inputs["Delta"]->SetValue<glm::vec2>({ e.motion.xrel, e.motion.yrel });
+			break;
 		case SDL_MOUSEBUTTONUP:
 		case SDL_MOUSEBUTTONDOWN:
+			switch (e.button.button)
+			{
+			case SDL_BUTTON_LEFT:
+				inputs["LButton"]->SetValue<bool>(e.button.state);
+				break;
+			case SDL_BUTTON_RIGHT:
+				inputs["RButton"]->SetValue<bool>(e.button.state);
+				break;
+			case SDL_BUTTON_MIDDLE:
+				inputs["MButton"]->SetValue<bool>(e.button.state);
+				break;
+			}
+			break;
 		case SDL_MOUSEWHEEL:
+			if (e.wheel.direction == SDL_MOUSEWHEEL_NORMAL)
+				inputs["Scroll"]->SetValue<glm::vec2>({ e.wheel.x, e.wheel.y });
+			else
+				inputs["Scroll"]->SetValue<glm::vec2>({ e.wheel.x * -1, e.wheel.y * -1 });
 			break;
 		} //TODO: Process events
+	}
+	void InputDevice_Mouse::PreUpdate()
+	{
+		inputs["Delta"]->SetValue<glm::vec2>({ 0, 0 });
+		inputs["Scroll"]->SetValue<glm::vec2>({ 0, 0 });
 	}
 }
