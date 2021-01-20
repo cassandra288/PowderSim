@@ -510,6 +510,7 @@ namespace powd::input
 		case SDL_MOUSEMOTION:
 			inputs["Position"]->SetValue<glm::vec2>({ e.motion.x, e.motion.y });
 			inputs["Delta"]->SetValue<glm::vec2>({ e.motion.xrel, e.motion.yrel });
+			deltaSet = true;
 			break;
 		case SDL_MOUSEBUTTONUP:
 		case SDL_MOUSEBUTTONDOWN:
@@ -531,12 +532,20 @@ namespace powd::input
 				inputs["Scroll"]->SetValue<glm::vec2>({ e.wheel.x, e.wheel.y });
 			else
 				inputs["Scroll"]->SetValue<glm::vec2>({ e.wheel.x * -1, e.wheel.y * -1 });
+			scrollSet = true;
 			break;
 		} //TODO: Process events
 	}
 	void InputDevice_Mouse::PreUpdate()
 	{
-		inputs["Delta"]->SetValue<glm::vec2>({ 0, 0 });
-		inputs["Scroll"]->SetValue<glm::vec2>({ 0, 0 });
+		deltaSet = false;
+		scrollSet = false;
+	}	
+	void InputDevice_Mouse::PostUpdate()
+	{
+		if (!deltaSet)
+			inputs["Delta"]->SetValue<glm::vec2>({ 0, 0 });
+		if (!scrollSet)
+			inputs["Scroll"]->SetValue<glm::vec2>({ 0, 0 });
 	}
 }

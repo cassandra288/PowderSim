@@ -96,10 +96,15 @@ namespace powd::input
 	};
 	class InputDevice_Mouse : public InputDevice
 	{
+	private:
+		bool deltaSet = false;
+		bool scrollSet = false;
+
 	public:
 		InputDevice_Mouse(std::string _name);
 	private:
-		void PreUpdate();
 		void UpdateInput(SDL_Event& e);
+		void PreUpdate();
+		void PostUpdate();
 	};
 }
