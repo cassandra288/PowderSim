@@ -6,6 +6,8 @@
 #include <CppLog/Logger.h>
 
 #include "src/Core/Exceptions/GenericExceptions.h"
+
+#include "src/Core/Input/InputDevice.h"
 USING_LOGGER
 
 
@@ -102,6 +104,8 @@ namespace powd::window
 
 		SDL_PumpEvents();
 
+		input::intern::InputProcessor::PreUpdate();
+
 		SDL_Event e;
 		int currentEvents = 0;
 		const int maxEvents = 50;
@@ -145,7 +149,24 @@ namespace powd::window
 					}
 				}
 			}
+			else
+			{
+				switch (e.type)
+				{
+				case SDL_KEYUP:
+				case SDL_KEYDOWN:
+				case SDL_MOUSEMOTION:
+				case SDL_MOUSEBUTTONUP:
+				case SDL_MOUSEBUTTONDOWN:
+				case SDL_MOUSEWHEEL:
+					if (instanceMap.find(e.key.windowID) == instanceMap.end())
+						break;
+					input::intern::InputProcessor::ProcessEvent(e);
+					break;
+				}
+			}
 		}
+		input::intern::InputProcessor::PostUpdate();
 
 		return SDL_PeepEvents(nullptr, UINT32_MAX, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
 	}

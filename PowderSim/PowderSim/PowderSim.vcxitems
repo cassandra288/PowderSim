@@ -22,6 +22,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\BaseException.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\GenericExceptions.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Exceptions\RenderingExceptions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\Input.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputAction.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDevice.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDrivers.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputProcessor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Math\CommonMath.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\StringUtils.h" />
@@ -39,7 +44,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\EntityRegistry.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\Input.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\InputAction.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDevice.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDrivers.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Utils\StringUtils.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Main.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Window\WindowManager.cpp" />
