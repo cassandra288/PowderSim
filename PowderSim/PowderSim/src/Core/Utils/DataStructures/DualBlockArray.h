@@ -127,6 +127,11 @@ namespace powd::utils
 			std::lock_guard<std::mutex> lk(mut);
 			return dataVec[DataIndex(_i)];
 		}
+
+		bool contains(unsigned _i)
+		{
+			return _i < indexToData.size();
+		}
 #pragma endregion
 #pragma region Capacity
 		unsigned size()

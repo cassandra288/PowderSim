@@ -401,14 +401,28 @@ namespace powd::sand
 		CreateDirtyData(idOut);
 		locationMap[GetMapLoc(pos)] = idOut;
 
+		Logger::Lock() << "Created powder: " << idOut << Logger::endl;
+
 		return true;
 	}
 	void RemovePowder(Powder powd)
 	{
+		Logger::Lock() << "Deleted powder: " << powd << Logger::endl;
+		if (!powders.contains(powd))
+			return;
 		dirtyData.push_back({ powders[powd].position, glm::uvec3(0, 0, 0) });
 		locationMap.erase(GetMapLoc(powders[powd].prevPosition));
 
 		powders.RemoveAt(powd);
+	}
+	void ClearPowders()
+	{
+		std::vector<Powder> powdersToRemove;
+		for (auto pair : locationMap)
+			powdersToRemove.push_back(pair.second);
+
+		for (auto powd : powdersToRemove)
+			RemovePowder(powd);
 	}
 
 	Powder GetPowder(glm::uvec2 pos)

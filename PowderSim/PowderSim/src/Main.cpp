@@ -31,6 +31,8 @@ USING_LOGGER
 namespace powd
 {
 	sand::Powder powd;
+	sand::Powder glider[5];
+
 	void OnStart()
 	{
 		new cpplog::Logger("log.txt", "Main", 4);
@@ -51,11 +53,13 @@ namespace powd
 		sand::CreateNewPowder("core:test", { 7, 5 }, powd);
 
 
-		sand::CreateNewPowder("core:test", { 1, 69 }, powd);
-		sand::CreateNewPowder("core:test", { 2, 69 }, powd);
-		sand::CreateNewPowder("core:test", { 3, 69 }, powd);
-		sand::CreateNewPowder("core:test", { 3, 70 }, powd);
-		sand::CreateNewPowder("core:test", { 2, 71 }, powd);
+		sand::CreateNewPowder("core:test", { 1, 69 }, glider[0]);
+		sand::CreateNewPowder("core:test", { 2, 69 }, glider[1]);
+		sand::CreateNewPowder("core:test", { 3, 69 }, glider[2]);
+		sand::CreateNewPowder("core:test", { 3, 70 }, glider[3]);
+		sand::CreateNewPowder("core:test", { 2, 71 }, glider[4]);
+
+		input::CreateAction("Remake Glider", "keyboard/P");
 	}
 
 	class TestSystem : ecs::SystemProto
@@ -68,12 +72,15 @@ namespace powd
 	public:
 		System_Tick(dt)
 		{
-			tmp++;
-			tmp = tmp % 30;
-
-			if (tmp == 0)
+			if (input::GetInput<bool>("Remake Glider"))
 			{
-				//sand::TranslatePowderPos({ 1, 0 }, powd);
+				sand::ClearPowders();
+
+				sand::CreateNewPowder("core:test", { 1, 69 }, glider[0]);
+				sand::CreateNewPowder("core:test", { 2, 69 }, glider[1]);
+				sand::CreateNewPowder("core:test", { 3, 69 }, glider[2]);
+				sand::CreateNewPowder("core:test", { 3, 70 }, glider[3]);
+				sand::CreateNewPowder("core:test", { 2, 71 }, glider[4]);
 			}
 			//Logger::Log(profiling::GetProfileDataStr());
 		}

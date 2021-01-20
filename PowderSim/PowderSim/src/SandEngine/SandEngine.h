@@ -14,6 +14,7 @@ namespace powd::sand
 
 	bool CreateNewPowder(std::string id, glm::uvec2 pos, Powder& idOut);
 	void RemovePowder(Powder powd);
+	void ClearPowders();
 
 	Powder GetPowder(glm::uvec2 pos);
 	std::string GetPowderType(Powder powder);
