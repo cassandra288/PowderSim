@@ -29,7 +29,8 @@ namespace powd::input
 	}
 	InputAction::~InputAction()
 	{
-
+		ClearBindings();
+		ClearProcessors();
 	}
 	InputAction::InputAction(InputAction& _o)
 	{
@@ -327,20 +328,47 @@ namespace powd::input
 		case InputDriver::Type::_bool:
 			for (auto processor : processors)
 				newData._bool = processor->ProcessBool(newData._bool);
+			if (data._bool != newData._bool)
+			{
+				data = newData;
+				onValueChangeSign.publish(this);
+			}
+			else
+				data = newData;
 			break;
 		case InputDriver::Type::_int:
 			for (auto processor : processors)
 				newData._int = processor->ProcessInt(newData._int);
+			if (data._int != newData._int)
+			{
+				data = newData;
+				onValueChangeSign.publish(this);
+			}
+			else
+				data = newData;
 			break;
 		case InputDriver::Type::_float:
 			for (auto processor : processors)
 				newData._float = processor->ProcessFloat(newData._float);
+			if (data._float != newData._float)
+			{
+				data = newData;
+				onValueChangeSign.publish(this);
+			}
+			else
+				data = newData;
 			break;
 		case InputDriver::Type::_vec2:
 			for (auto processor : processors)
 				newData._vec2 = processor->ProcessVec2(newData._vec2);
+			if (data._vec2 != newData._vec2)
+			{
+				data = newData;
+				onValueChangeSign.publish(this);
+			}
+			else
+				data = newData;
 			break;
 		}
-		data = newData;
 	}
 }

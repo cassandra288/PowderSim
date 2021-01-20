@@ -28,7 +28,7 @@ USING_LOGGER
 
 
 namespace powd
-{	
+{
 	void OnStart()
 	{
 		new cpplog::Logger("log.txt", "Main", 4);

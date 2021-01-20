@@ -28,6 +28,10 @@ namespace powd::input
 		std::unordered_map<std::string, InputDriver*> drivers;
 		InputDriver* leadDriver;
 		std::vector<InputProcessor*> processors;
+		entt::sigh<void(InputAction*)> onValueChangeSign;
+
+	public:
+		entt::sink<void(InputAction*)> onValueChange = entt::sink<void(InputAction*)>(onValueChangeSign);
 
 	public:
 		InputAction();
