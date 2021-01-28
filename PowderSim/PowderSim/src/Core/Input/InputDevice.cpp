@@ -501,7 +501,6 @@ namespace powd::input
 		new InputDriverVec2("Delta", { 0, 0 }, this);
 
 		new InputDriverVec2("Scroll", { 0, 0, }, this);
-		//TODO: Maybe add consecutive click counter?
 	}
 	void InputDevice_Mouse::UpdateInput(SDL_Event& e)
 	{
@@ -534,7 +533,7 @@ namespace powd::input
 				inputs["Scroll"]->SetValue<glm::vec2>({ e.wheel.x * -1, e.wheel.y * -1 });
 			scrollSet = true;
 			break;
-		} //TODO: Process events
+		}
 	}
 	void InputDevice_Mouse::PreUpdate()
 	{
