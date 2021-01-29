@@ -101,8 +101,6 @@ namespace powd::rendering
 				(*uboData)[i] = new UboData();
 			}
 		}
-
-		RemakeUBO();
 	}
 	void GlUbo::MarkStructEnd()
 	{
@@ -410,7 +408,7 @@ namespace powd::rendering
 			delete[] newRawData;
 
 			_change->dataSize = dataSize;
-		} // TODO: add an else here for when there isn't a specified change. Rebuild the whole buffer from scratch.
+		}
 	}
 
 
