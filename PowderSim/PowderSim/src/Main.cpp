@@ -39,16 +39,13 @@ namespace powd
 		
 		rendering::StartRenderer();
 
-		input::AddDevice<input::InputDevice_Keyboard, std::string>("keyboard", "Keyboard");
-		input::AddDevice<input::InputDevice_Mouse, std::string>("mouse", "Mouse");
+		input::AddDevice<input::InputDevice_Keyboard, std::string>("keyboard", "keyboard");
+		input::AddDevice<input::InputDevice_Mouse, std::string>("mouse", "mouse");
 	}
 
 	class TestSystem : ecs::SystemProto
 	{
 		DEFINE_SYSTEM_PROTO(TestSystem);
-
-	private:
-		bool prevToggleVal;
 
 	public:
 		System_Tick(dt)
@@ -65,6 +62,8 @@ namespace powd
 		rendering::StopRenderer();
 
 		window::StopSDL();
+
+		cpplog::Logger::Destruct();
 	}
 
 	
