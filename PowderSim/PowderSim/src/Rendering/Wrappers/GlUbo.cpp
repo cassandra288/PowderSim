@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
+#include <CppLog/Logger.h>
 
 
 namespace powd::rendering
@@ -104,6 +105,8 @@ namespace powd::rendering
 	}
 	void GlUbo::MarkStructEnd()
 	{
+		cpplog::Logger::Log("Struct behaviour for UBOs is currently undefined and doesn't work in most use cases.", cpplog::Logger::WARNING);
+
 		UboData* data = new UboData();
 
 		data->index = uboData->size();
