@@ -15,6 +15,9 @@
 
 
 #pragma region FunctionDefines
+#define System_Start() void Start()
+#define System_End() void End()
+
 #define System_PreRender(__dt__) void PreRender(float __dt__)
 #define System_Render(__dt__) void Render(float __dt__)
 #define System_PostRender(__dt__) void PostRender(float __dt__)
@@ -39,6 +42,9 @@ namespace powd::ecs
 
 
 #pragma region UpdateFunctions
+		virtual System_Start() {};
+		virtual System_End() {};
+
 		virtual System_PreRender(dt) {};
 		virtual System_Render(dt) {};
 		virtual System_PostRender(dt) {};

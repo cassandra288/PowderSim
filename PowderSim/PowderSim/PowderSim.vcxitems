@@ -29,6 +29,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputProcessor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Math\CommonMath.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Profiling\CPUProfiler.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\Bitflag.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\StringUtils.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Main.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Window\Window.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlUbo.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlVertexCache.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\UI\Widget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Dispatching\CoreLoops.cpp" />
@@ -58,5 +60,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlTexture.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlUbo.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Rendering\Wrappers\GlVertexCache.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\UI\Widget.cpp" />
   </ItemGroup>
 </Project>

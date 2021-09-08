@@ -333,8 +333,6 @@ namespace powd::input
 				data = newData;
 				onValueChangeSign.publish(this);
 			}
-			else
-				data = newData;
 			break;
 		case InputDriver::Type::_int:
 			for (auto processor : processors)
@@ -344,8 +342,6 @@ namespace powd::input
 				data = newData;
 				onValueChangeSign.publish(this);
 			}
-			else
-				data = newData;
 			break;
 		case InputDriver::Type::_float:
 			for (auto processor : processors)
@@ -355,8 +351,6 @@ namespace powd::input
 				data = newData;
 				onValueChangeSign.publish(this);
 			}
-			else
-				data = newData;
 			break;
 		case InputDriver::Type::_vec2:
 			for (auto processor : processors)
@@ -366,8 +360,6 @@ namespace powd::input
 				data = newData;
 				onValueChangeSign.publish(this);
 			}
-			else
-				data = newData;
 			break;
 		}
 	}

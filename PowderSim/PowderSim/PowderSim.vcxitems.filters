@@ -40,6 +40,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDrivers.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDevice.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Input\InputProcessor.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\UI\Widget.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\Core\Utils\Bitflag.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Ecs\SystemProto.cpp" />
@@ -59,5 +61,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDrivers.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Input\InputDevice.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)src\Core\Utils\StringUtils.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\UI\Widget.cpp" />
   </ItemGroup>
 </Project>

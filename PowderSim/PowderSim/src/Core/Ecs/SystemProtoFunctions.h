@@ -5,6 +5,22 @@
 
 namespace powd::ecs::system
 {
+	void RunSystems_Start()
+	{
+		for (std::pair<std::string, SystemProto*> proto : SystemProto::systems)
+		{
+			proto.second->Start();
+		}
+	}
+
+	void RunSystems_End()
+	{
+		for (std::pair<std::string, SystemProto*> proto : SystemProto::systems)
+		{
+			proto.second->End();
+		}
+	}
+
 	void RunSystems_PreRender(float dt)
 	{
 		for (std::pair<std::string, SystemProto*> proto : SystemProto::systems)

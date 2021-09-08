@@ -48,6 +48,7 @@ namespace powd::window
 		std::string getTitle() { std::lock_guard<std::mutex>lck(mut); return title; }
 		unsigned int getWidth() { std::lock_guard<std::mutex>lck(mut); return width; }
 		unsigned int getHeight() { std::lock_guard<std::mutex>lck(mut); return height; }
+		float getAspect() { std::lock_guard<std::mutex>lck(mut); return width / height; }
 
 		operator SDL_Window* () { std::lock_guard<std::mutex>lck(mut); return sdlWindow; }
 		operator SDL_GLContext () { std::lock_guard<std::mutex>lck(mut); return glContext; }

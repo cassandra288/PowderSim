@@ -72,6 +72,7 @@ namespace powd::dispatch
 
 		const std::chrono::milliseconds roughness(100); // thread waiting isn't precise and therefor we need some roughness to our time
 
+		ecs::system::RunSystems_Start();
 		while (running)
 		{
 			if (std::chrono::steady_clock::now() >= nextUpdate)
@@ -124,5 +125,6 @@ namespace powd::dispatch
 				profiling::StopSectionProfile();
 			}
 		}
+		ecs::system::RunSystems_End();
 	}
 }
